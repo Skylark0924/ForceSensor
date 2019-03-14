@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,7 +18,7 @@ namespace ForceSensor
     {
         
         private delegate void MyInvoke();
-        public char[] delimiterChars = { ' ', ',', '\t' };
+        public char[] delimiterChars = { ' ', ',', '\t' }
         public Form1()
         {
             InitializeComponent();
