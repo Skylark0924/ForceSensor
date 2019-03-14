@@ -18,7 +18,7 @@ namespace ForceSensor
     {
         
         private delegate void MyInvoke();
-        public char[] delimiterChars = { ' ', ',', '\t' }
+        public char[] delimiterChars = { ' ', ',', '\t' };
         public Form1()
         {
             InitializeComponent();
