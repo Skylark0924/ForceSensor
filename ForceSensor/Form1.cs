@@ -86,8 +86,8 @@ namespace ForceSensor
                 MessageBox.Show(ee.ToString());
             }
             this.button1.Enabled = false;
-            System.Timers.Timer mytimer1 = new System.Timers.Timer(1000);
-            System.Timers.Timer mytimer2 = new System.Timers.Timer(1000);
+            System.Timers.Timer mytimer1 = new System.Timers.Timer(20);
+            System.Timers.Timer mytimer2 = new System.Timers.Timer(20);
             mytimer1.Elapsed += mytimer_done1;
             mytimer1.AutoReset = true;
             mytimer1.Enabled = true;
