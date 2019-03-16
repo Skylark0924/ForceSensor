@@ -11,15 +11,14 @@ using System.IO;
 using System.IO.Ports;
 using System.Diagnostics;
 using System.Threading;
+using System.Timers;
 
 namespace ForceSensor
 {
     public partial class Form1 : Form
     {
-
-        SerialPort serialPort1 = new SerialPort();
-        SerialPort serialPort2 = new SerialPort();
-       
+        private SerialPort serialPort1;
+        private SerialPort serialPort2;
         public char[] delimiterChars = { ' ', ',', '\t' };
         public Form1()
         {
@@ -31,7 +30,7 @@ namespace ForceSensor
         {
             //获取单片机与计算机连接的端口号
             string[] ports = SerialPort.GetPortNames();
-            if (ports.Length == 0)  MessageBox.Show("No ports are found!");
+            if (ports.Length == 0) MessageBox.Show("No ports are found!");
             //绑定串口列表到下拉列表,设置第一项为默认值   
             foreach (var com in ports)
             {
@@ -45,62 +44,61 @@ namespace ForceSensor
         int num2 = 0;
         private void button1_Click(object sender, EventArgs e)
         {
-            
             if (comboPortName1.Items.Count == 0 || comboPortName2.Items.Count == 0)
             {
                 MessageBox.Show("No ports are found!");
                 return;
             }
-           
             serialPort1 = new SerialPort();       //实例化SerialPort并设置COM口
             serialPort1.BaudRate = 9600;//波特率
             serialPort1.Parity = Parity.None;//无奇偶校验位
             serialPort1.StopBits = StopBits.One;//一个停止位
-
             serialPort2 = new SerialPort();       //实例化SerialPort并设置COM口
             serialPort2.BaudRate = 9600;//波特率
             serialPort2.Parity = Parity.None;//无奇偶校验位
             serialPort2.StopBits = StopBits.One;//一个停止位
             try
             {
-                if (!serialPort1.IsOpen)
+                if (!serialPort1.IsOpen && !serialPort2.IsOpen)
                 {
                     serialPort1.PortName = comboPortName1.SelectedItem.ToString();
                     serialPort2.PortName = comboPortName2.SelectedItem.ToString();
-
                     serialPort2.Handshake = Handshake.RequestToSendXOnXOff;
                     serialPort1.Handshake = Handshake.RequestToSendXOnXOff;
                     serialPort1.Open();
                     serialPort2.Open();
-
-
                     button1.Text = "关闭串口";
                     this.comboPortName1.Enabled = false;
                     this.comboPortName2.Enabled = false;
                 }
                 else
                 {
-                    
+
                     serialPort1.Close();
                     serialPort2.Close();
                     button1.Text = "打开串口";
                     this.comboPortName1.Enabled = true;
                     this.comboPortName2.Enabled = true;
-                }    
+                }
             }
             catch (Exception ee)
             {
                 MessageBox.Show(ee.ToString());
-            }          
-            //this.button1.Enabled = false;
-            System.Threading.Timer mytimer1 = new System.Threading.Timer(new TimerCallback(mytimer_done1), this, 0, 20);
-            System.Threading.Timer mytimer2 = new System.Threading.Timer(new TimerCallback(mytimer_done2), this, 0, 20);
+            }
+            this.button1.Enabled = false;
+            System.Timers.Timer mytimer1 = new System.Timers.Timer(1000);
+            System.Timers.Timer mytimer2 = new System.Timers.Timer(1000);
+            mytimer1.Elapsed += mytimer_done1;
+            mytimer1.AutoReset = true;
+            mytimer1.Enabled = true;
+            mytimer2.Elapsed += mytimer_done2;
+            mytimer2.AutoReset = true;
+            mytimer2.Enabled = true;
         }
 
         void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-            TextBox[] tbs = { textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, textBox8 };
-            //byte[] SerialBuff = new byte[serialPort1.BytesToRead];//串口接收数据临时缓存            
+            TextBox[] tbs = { textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, textBox8 };        
             string buff1;           
             buff1 = serialPort1.ReadLine();
             buff1 = buff1.Replace(", ", " ");
@@ -122,8 +120,6 @@ namespace ForceSensor
         void serialPort2_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             TextBox[] tbs = { textBox9, textBox10, textBox11, textBox12, textBox13, textBox14, textBox15, textBox16 };
-            //byte[] SerialBuff = new byte[serialPort1.BytesToRead];//串口接收数据临时缓存
-
             string buff2;
             buff2 = serialPort2.ReadLine();
             buff2 = buff2.Replace(", ", " ");
@@ -139,7 +135,6 @@ namespace ForceSensor
                     }
                 }
             }
-
             textBox17.Text = (double.Parse(textBox2.Text) - double.Parse(textBox3.Text)).ToString();
             textBox18.Text = (double.Parse(textBox4.Text) - double.Parse(textBox5.Text)).ToString();
             textBox19.Text = (double.Parse(textBox6.Text) - double.Parse(textBox7.Text)).ToString();
@@ -147,13 +142,15 @@ namespace ForceSensor
             textBox21.Text = (double.Parse(textBox12.Text) - double.Parse(textBox13.Text)).ToString();
             textBox22.Text = (double.Parse(textBox14.Text) - double.Parse(textBox15.Text)).ToString();
         }
-        void mytimer_done1(object state)
+        void mytimer_done1(Object source, ElapsedEventArgs e)
         {
             serialPort1.DataReceived += serialPort1_DataReceived;
+            textBox23.Text = (num++).ToString();
         }
-        void mytimer_done2(object state)
+        void mytimer_done2(Object source, ElapsedEventArgs e)
         {
             serialPort2.DataReceived += serialPort2_DataReceived;
+            richTextBox1.Text = (num2++).ToString();
         }
         void mytimer_save(object state)
         {
@@ -255,18 +252,6 @@ namespace ForceSensor
             //}
             //strmsave.Close();
             //this.button2.Enabled = true;
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            //serialPort1.DataReceived += serialPort1_DataReceived;
-            //serialPort2.DataReceived += serialPort2_DataReceived;
-            //textBox17.Text = (double.Parse(textBox5.Text) - double.Parse(textBox13.Text)).ToString();
-            //textBox18.Text = (double.Parse(textBox7.Text) - double.Parse(textBox14.Text)).ToString();
-            //textBox19.Text = (double.Parse(textBox6.Text) - double.Parse(textBox15.Text)).ToString();
-            //textBox20.Text = (double.Parse(textBox2.Text) - double.Parse(textBox10.Text)).ToString();
-            //textBox21.Text = (double.Parse(textBox3.Text) - double.Parse(textBox11.Text)).ToString();
-            //textBox22.Text = (double.Parse(textBox4.Text) - double.Parse(textBox12.Text)).ToString();
         }
     }
 }
