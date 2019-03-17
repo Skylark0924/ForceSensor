@@ -1,0 +1,67 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¶ÃVision V5.26.2.0
+Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: junjia liu, sjtu, LIC=KIVRA-16HN0-F14PT-RGV08-LL227-W3CR5
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.26.2.0
+Toolchain Path:  D:\MDK\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.05 update 1 (build 106)
+Assembler:       Armasm.exe V5.05 update 1 (build 106)
+Linker/Locator:  ArmLink.exe V5.05 update 1 (build 106)
+Library Manager: ArmAr.exe V5.05 update 1 (build 106)
+Hex Converter:   FromElf.exe V5.05 update 1 (build 106)
+CPU DLL:         SARMCM3.DLL V5.26.2.0
+Dialog DLL:      DCM.DLL V1.13.1.0
+Target DLL:      Segger\JL2CM3.dll V2.99.31.0
+Dialog DLL:      TCM.DLL V1.36.1.0
+ 
+<h2>Project:</h2>
+E:\Academic_information\Robotics\STM32F10x_StdPeriph_Lib_V3.3.0_ADS1256\Project\ADS1256_STM32F103_SPI1\MDK-ARM\Project.uvprojx
+Project File Date:  03/07/2019
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.05 update 1 (build 106)', folder: 'D:\MDK\ARM\ARMCC\Bin'
+Build target '…Ò÷€III∫≈'
+compiling main.c...
+..\ADS1256_Driver\ADS1256.h(106): warning:  #1295-D: Deprecated declaration ADS1256ReadData - give arg types
+  unsigned int ADS1256ReadData();
+..\main.c(148): warning:  #181-D: argument is incompatible with corresponding format string conversion
+  			printf("%lf, ",ldVolutage); 	//double
+..\main.c(102): warning:  #177-D: variable "num" was declared but never referenced
+  		int num=1;
+..\main.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=5560 RO-data=504 RW-data=96 ZI-data=1024  
+FromELF: creating hex file...
+".\obj\ADS1256.axf" - 0 Error(s), 3 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.4.0.pack
+                ARM.CMSIS.5.4.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.1.2
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F1xx_DFP.2.3.0.pack
+                Keil.STM32F1xx_DFP.2.3.0
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_____III__
+  D:\MDK\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include
+  D:\MDK\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.1.2
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>
