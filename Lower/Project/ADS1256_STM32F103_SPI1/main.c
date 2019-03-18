@@ -109,7 +109,7 @@ int main(void)
 
 	Init_ADS1256_GPIO(); //≥ı ºªØADS1256 GPIOπ‹Ω≈ 
 
-	Delay(0x1ffFF);
+//	Delay(0x1ffFF);
 	GPIO_SetBits(GPIOB, GPIO_Pin_11 );  
 	ADS1256_Init();
 	
@@ -130,25 +130,14 @@ int main(void)
 				ulResult += 1;
 				ulResult = -ulResult;
 			}
-//			if(num<10000)
-//			{
-//				ldVolutage=1000000;
-//				num++;
-//			}
-//			else if(10000<num&& num<20000)
-//			{
-//				ldVolutage=0;
-//				num++;
-//			}
-//			else {num=1;}
+
 		
 			ldVolutage = (long double)ulResult*0.59604644775390625;
 			
-
 			printf("%lf, ",ldVolutage); 	//double
 
 			//printf("%x",(unsigned long)ulResult);//16
-//			delay_ms(0x10);
+//			Delay(0x3ffff);
 		}
 		
 //		fprintf(fp,"\n");

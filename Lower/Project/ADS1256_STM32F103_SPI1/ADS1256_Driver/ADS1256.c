@@ -118,7 +118,7 @@ void ADS1256_Init(void)
 	ADS1256WREG(ADS1256_STATUS,0x06);               // 高位在前、校准、使用缓冲
 //	ADS1256WREG(ADS1256_MUX,0x08);                  // 初始化端口A0为‘+’，AINCOM位‘-’
 	ADS1256WREG(ADS1256_ADCON,0x00);                // 放大倍数1
-	ADS1256WREG(ADS1256_DRATE,ADS1256_DRATE_10SPS);  // 数据5sps
+	ADS1256WREG(ADS1256_DRATE,ADS1256_DRATE_100SPS);  // 数据5sps
 	ADS1256WREG(ADS1256_IO,0x00);               
 }
 

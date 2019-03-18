@@ -36,3 +36,12 @@ E:\Github\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.
 E:\Github\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.CoreCompileInputs.cache
 E:\Github\ForceSensor\ForceSensor\obj\Debug\ForceSensor.exe
 E:\Github\ForceSensor\ForceSensor\obj\Debug\ForceSensor.pdb
+D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe.config
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.exe
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.pdb
+D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe
+D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.pdb
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csprojResolveAssemblyReference.cache
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Form1.resources
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.Cache
