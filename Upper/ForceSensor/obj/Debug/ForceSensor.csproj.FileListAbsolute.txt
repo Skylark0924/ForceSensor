@@ -26,3 +26,6 @@ C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor
 C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Form1.resources
 C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
 C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.Cache
+D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe.config
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.exe
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.pdb
