@@ -31,32 +31,10 @@ D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe.config
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.exe
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.pdb
 =======
-E:\VSwork\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe.config
-E:\VSwork\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe
-E:\VSwork\ForceSensor\ForceSensor\bin\Debug\ForceSensor.pdb
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csprojAssemblyReference.cache
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Form1.resources
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.cache
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.CoreCompileInputs.cache
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.exe
-E:\VSwork\ForceSensor\ForceSensor\obj\Debug\ForceSensor.pdb
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe.config
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\bin\Debug\ForceSensor.pdb
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Form1.resources
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.cache
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.CoreCompileInputs.cache
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\obj\Debug\ForceSensor.exe
-C:\Users\Zeyu\Documents\WeChat Files\wxid_2i83vjni7pzt21\FileStorage\File\2019-03\ForceSensor\ForceSensor\obj\Debug\ForceSensor.pdb
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe.config
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.exe
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.pdb
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\bin\Debug\ForceSensor.pdb
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csprojResolveAssemblyReference.cache
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Form1.resources
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
-C:\Users\admin\Desktop\ForceSensor\ForceSensor\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.Cache
 >>>>>>> 848c65e79b03ceca54cf3892a2aa15f08be739b5
+D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe
+D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.pdb
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csprojResolveAssemblyReference.cache
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Form1.resources
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
+D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.Cache

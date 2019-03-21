@@ -215,7 +215,7 @@ namespace ForceSensor
 
         private void UpdateSave()
         {
-            strmsave = new StreamWriter("D:\\ForceSensor\\data\\data_x+向上_x-y+30度.txt", true, System.Text.Encoding.Default);
+            strmsave = new StreamWriter("D:\\ForceSensor\\data\\data_z+向上_x+ .txt", true, System.Text.Encoding.Default);
 
             mytimer1 = new System.Threading.Timer(new TimerCallback(mytimer_save), this, 0, 50);
 
