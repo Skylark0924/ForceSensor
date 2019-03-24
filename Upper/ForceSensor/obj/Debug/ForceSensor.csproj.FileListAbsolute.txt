@@ -38,3 +38,17 @@ D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csprojResolveAssemblyRefe
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Form1.resources
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.Cache
+E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe.config
+E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe
+E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.pdb
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csprojAssemblyReference.cache
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Form1.resources
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Properties.Resources.resources
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.GenerateResource.cache
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.CoreCompileInputs.cache
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.exe
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.pdb
+E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\LinearAlgebra.dll
+E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\LinearAlgebra.pdb
+E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\LinearAlgebra.dll.config
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.CopyComplete

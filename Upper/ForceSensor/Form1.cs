@@ -11,6 +11,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Diagnostics;
 using System.Threading;
+using LinearAlgebra;
 
 namespace ForceSensor
 {
@@ -23,6 +24,7 @@ namespace ForceSensor
         System.Threading.Timer mytimer;
         System.Threading.Timer mytimer1;
         public StreamWriter strmsave;
+        public double[] zero;
         public char[] delimiterChars = { ' ', ',', '\t' };
         public Form1()
         {
@@ -34,7 +36,7 @@ namespace ForceSensor
         {
             //获取单片机与计算机连接的端口号
             string[] ports = SerialPort.GetPortNames();
-            if (ports.Length == 0)  MessageBox.Show("No ports are found!");
+            if (ports.Length == 0) MessageBox.Show("No ports are found!");
             //绑定串口列表到下拉列表,设置第一项为默认值   
             foreach (var com in ports)
             {
@@ -287,5 +289,38 @@ namespace ForceSensor
             //textBox22.Text = (double.Parse(textBox4.Text) - double.Parse(textBox12.Text)).ToString();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            double[] zero = { double.Parse(textBox17.Text) ,double.Parse(textBox18.Text),
+                            double.Parse(textBox19.Text) ,double.Parse(textBox20.Text),
+                            double.Parse(textBox21.Text) ,double.Parse(textBox22.Text)};
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            double Fa, Fb, Fc, Ma, Mb, Mc;
+
+            Fa = double.Parse(textBox17.Text) - zero[0];
+            Fb = double.Parse(textBox18.Text) - zero[1];
+            Fc = double.Parse(textBox19.Text) - zero[2];
+            Ma = double.Parse(textBox20.Text) - zero[3];
+            Mb = double.Parse(textBox21.Text) - zero[4];
+            Mc = double.Parse(textBox22.Text) - zero[5];
+
+            Matrix Input = Matrix.Create(6, 1, new double[] { Fa, Fb, Fc, Ma, Mb, Mc });            
+            Matrix W1 = Matrix.Create(2, 2, new double[] {  }); 
+            Matrix W2 = Matrix.Create(2, 2, new double[] {  }); 
+            Matrix b1 = Matrix.Create(1, 2, new double[] {  }); 
+            Matrix b2 = Matrix.Create(1, 2, new double[] {  });
+            Matrix Output_hide = W1 * Input + b1;
+            Matrix Output = W2 * Output_hide + b2;
+
+            textBox23.Text = Output[0, 0].ToString();
+            textBox24.Text = Output[1, 0].ToString();
+            textBox25.Text = Output[2, 0].ToString();
+            textBox26.Text = Output[3, 0].ToString();
+            textBox27.Text = Output[4, 0].ToString();
+            textBox28.Text = Output[5, 0].ToString();
+        }
     }
 }
