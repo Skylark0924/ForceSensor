@@ -494,7 +494,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(64, 16);
             this.label11.TabIndex = 50;
-            this.label11.Text = "力矩C：";
+            this.label11.Text = "力矩Z：";
             // 
             // textBox24
             // 
@@ -511,7 +511,7 @@
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(64, 16);
             this.label12.TabIndex = 48;
-            this.label12.Text = "力矩B：";
+            this.label12.Text = "力矩Y：";
             // 
             // textBox25
             // 
@@ -528,7 +528,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(64, 16);
             this.label13.TabIndex = 46;
-            this.label13.Text = "力矩A：";
+            this.label13.Text = "力矩X：";
             // 
             // textBox26
             // 
@@ -545,7 +545,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(48, 16);
             this.label14.TabIndex = 44;
-            this.label14.Text = "力C：";
+            this.label14.Text = "力Z：";
             // 
             // textBox27
             // 
@@ -562,7 +562,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(48, 16);
             this.label15.TabIndex = 42;
-            this.label15.Text = "力B：";
+            this.label15.Text = "力Y：";
             // 
             // textBox28
             // 
@@ -579,7 +579,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(48, 16);
             this.label16.TabIndex = 40;
-            this.label16.Text = "力A：";
+            this.label16.Text = "力X：";
             // 
             // Form1
             // 
