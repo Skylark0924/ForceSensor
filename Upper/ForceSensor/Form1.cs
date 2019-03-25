@@ -24,7 +24,7 @@ namespace ForceSensor
         System.Threading.Timer mytimer;
         System.Threading.Timer mytimer1;
         public StreamWriter strmsave;
-        public double[] zero;
+        public static double[] zero =new double[6];
         public char[] delimiterChars = { ' ', ',', '\t' };
         public Form1()
         {
@@ -291,9 +291,13 @@ namespace ForceSensor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            double[] zero = { double.Parse(textBox17.Text) ,double.Parse(textBox18.Text),
-                            double.Parse(textBox19.Text) ,double.Parse(textBox20.Text),
-                            double.Parse(textBox21.Text) ,double.Parse(textBox22.Text)};
+            //double[] zero = new double[6];
+            zero[0] = double.Parse(textBox17.Text);
+            zero[1] = double.Parse(textBox18.Text);
+            zero[2] = double.Parse(textBox19.Text);
+            zero[3] = double.Parse(textBox20.Text);
+            zero[4] = double.Parse(textBox21.Text);
+            zero[5] = double.Parse(textBox22.Text);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -343,13 +347,14 @@ namespace ForceSensor
 1.9042,
 1.996,
 2.5599}); 
-            Matrix b2 = Matrix.Create(1, 2, new double[] { 1.5398,
+            Matrix b2 = Matrix.Create(6, 1, new double[] { 1.5398,
 -0.51488,
 0.46699,
 -1.2084,
 -1.4908,
 -0.17314 });
             Matrix Output_hide = W1 * Input + b1;
+            
             Matrix Output = W2 * Output_hide + b2;
 
             textBox23.Text = ((Output[0, 0] - 1) / 2.0).ToString();

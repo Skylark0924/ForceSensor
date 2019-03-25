@@ -17,3 +17,9 @@ E:\Github\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.
 E:\Github\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.csproj.CoreCompileInputs.cache
 E:\Github\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.dll
 E:\Github\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.pdb
+D:\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\bin\Debug\LinearAlgebra.dll.config
+D:\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\bin\Debug\LinearAlgebra.dll
+D:\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\bin\Debug\LinearAlgebra.pdb
+D:\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.csprojResolveAssemblyReference.cache
+D:\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.dll
+D:\ForceSensor\Upper\LinearAlgebra\LinearAlgebra\obj\Debug\LinearAlgebra.pdb
