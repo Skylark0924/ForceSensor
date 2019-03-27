@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 E:\VSwork\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe.config
 E:\VSwork\ForceSensor\ForceSensor\bin\Debug\ForceSensor.exe
 E:\VSwork\ForceSensor\ForceSensor\bin\Debug\ForceSensor.pdb
@@ -31,7 +30,6 @@ D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe.config
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.exe
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.pdb
 =======
->>>>>>> 848c65e79b03ceca54cf3892a2aa15f08be739b5
 D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.exe
 D:\ForceSensor\Upper\ForceSensor\bin\Debug\ForceSensor.pdb
 D:\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csprojResolveAssemblyReference.cache
