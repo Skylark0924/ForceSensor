@@ -258,12 +258,12 @@ namespace ForceSensor
 
             Matrix Output = W2 * Output_hide + b2;
 
-            textBox28.Text = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
-            textBox27.Text = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
-            textBox26.Text = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
-            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000000).ToString();
-            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090* 1000000).ToString();
-            textBox25.Text = (Output[5, 0] * 0.090 * 1000000).ToString();
+            textBox28.Text = ((Output[0, 0] - 1) / 2.0 ).ToString();
+            textBox27.Text = ((Output[1, 0] + 1) / 2.0 ).ToString();
+            textBox26.Text = ((Output[2, 0] - 1) / 2.0 ).ToString();
+            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
+            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090* 1000).ToString();
+            textBox25.Text = (Output[5, 0] * 0.090 * 1000).ToString();
         }
 
         //数据保存按钮触发，创建UpdateSave线程
