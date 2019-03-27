@@ -258,12 +258,12 @@ namespace ForceSensor
 
             Matrix Output = W2 * Output_hide + b2;
 
-            textBox23.Text = ((Output[0, 0] - 1) / 2.0).ToString();
-            textBox24.Text = ((Output[1, 0] + 1) / 2.0).ToString();
-            textBox25.Text = ((Output[2, 0] - 1) / 2.0).ToString();
-            textBox26.Text = ((Output[3, 0] + 1) / 2.0 * 0.032).ToString();
-            textBox27.Text = ((Output[4, 0] + 1) / 2.0 * 0.090).ToString();
-            textBox28.Text = (Output[5, 0] * 0.090).ToString();
+            textBox28.Text = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
+            textBox27.Text = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
+            textBox26.Text = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
+            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000000).ToString();
+            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090* 1000000).ToString();
+            textBox25.Text = (Output[5, 0] * 0.090 * 1000000).ToString();
         }
 
         //数据保存按钮触发，创建UpdateSave线程
@@ -287,7 +287,7 @@ namespace ForceSensor
         //解耦按钮触发，创建解耦定时器，调用mytimer_decouple，间隔为50ms
         private void button4_Click(object sender, EventArgs e)
         {
-            mytimer2 = new System.Threading.Timer(new TimerCallback(mytimer_decouple), this, 0, 50);
+            mytimer2 = new System.Threading.Timer(new TimerCallback(mytimer_decouple), this, 0, 100);
         }
     }
 }
