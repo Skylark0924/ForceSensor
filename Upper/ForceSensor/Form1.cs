@@ -213,50 +213,50 @@ namespace ForceSensor
         //串口接收按钮触发，创建串口接收定时器，调用mytimer_done，间隔为50ms
         private void button1_Click(object sender, EventArgs e)
         {
-            //if (comboPortName1.Items.Count == 0 || comboPortName2.Items.Count == 0)
-            //{
-            //    MessageBox.Show("No ports are found!");
-            //    return;
-            //}
-            //try
-            //{
-            //    if (!serialPort1.IsOpen)
-            //    {
-            //        serialPort1.BaudRate = 9600;//波特率
-            //        serialPort1.Parity = Parity.None;//无奇偶校验位
-            //        serialPort1.StopBits = StopBits.One;//一个停止位
+            if (comboPortName1.Items.Count == 0 || comboPortName2.Items.Count == 0)
+            {
+                MessageBox.Show("No ports are found!");
+                return;
+            }
+            try
+            {
+                if (!serialPort1.IsOpen)
+                {
+                    serialPort1.BaudRate = 9600;//波特率
+                    serialPort1.Parity = Parity.None;//无奇偶校验位
+                    serialPort1.StopBits = StopBits.One;//一个停止位
 
-            //        serialPort2.BaudRate = 9600;//波特率
-            //        serialPort2.Parity = Parity.None;//无奇偶校验位
-            //        serialPort2.StopBits = StopBits.One;//一个停止位
+                    serialPort2.BaudRate = 9600;//波特率
+                    serialPort2.Parity = Parity.None;//无奇偶校验位
+                    serialPort2.StopBits = StopBits.One;//一个停止位
 
-            //        serialPort1.PortName = comboPortName1.SelectedItem.ToString();
-            //        serialPort2.PortName = comboPortName2.SelectedItem.ToString();
+                    serialPort1.PortName = comboPortName1.SelectedItem.ToString();
+                    serialPort2.PortName = comboPortName2.SelectedItem.ToString();
 
-            //        serialPort1.Handshake = Handshake.RequestToSendXOnXOff;
-            //        serialPort1.Open();
-            //        serialPort2.Handshake = Handshake.RequestToSendXOnXOff;
-            //        serialPort2.Open();
+                    serialPort1.Handshake = Handshake.RequestToSendXOnXOff;
+                    serialPort1.Open();
+                    serialPort2.Handshake = Handshake.RequestToSendXOnXOff;
+                    serialPort2.Open();
 
             mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), this, 0, 50);
-            //        button1.Text = "关闭串口";
-            //        this.comboPortName1.Enabled = false;
-            //        this.comboPortName2.Enabled = false;
-            //    }
-            //    else
-            //    {                    
-            //        serialPort1.Close();
-            //        serialPort2.Close();
-            //        button1.Text = "打开串口";
-            //        this.comboPortName1.Enabled = true;
-            //        this.comboPortName2.Enabled = true;
-            //    }    
-            //}
-            //catch (Exception ee)
-            //{
-            //    MessageBox.Show(ee.ToString());
-            //}          
-            ////this.button1.Enabled = false;
+                    button1.Text = "关闭串口";
+                    this.comboPortName1.Enabled = false;
+                    this.comboPortName2.Enabled = false;
+                }
+                else
+                {                    
+                    serialPort1.Close();
+                    serialPort2.Close();
+                    button1.Text = "打开串口";
+                    this.comboPortName1.Enabled = true;
+                    this.comboPortName2.Enabled = true;
+                }    
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show(ee.ToString());
+            }          
+            //this.button1.Enabled = false;
         }
 
         //串口接收
@@ -415,12 +415,12 @@ namespace ForceSensor
 
             Matrix Output = W2 * Output_hide + b2;
 
-            textBox28.Text = ((Output[0, 0] - 1) / 2.0 ).ToString();
-            textBox27.Text = ((Output[1, 0] + 1) / 2.0 ).ToString();
-            textBox26.Text = ((Output[2, 0] - 1) / 2.0 ).ToString();
-            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 ).ToString();
-            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090).ToString();
-            textBox25.Text = (Output[5, 0] * 0.090  ).ToString();
+            textBox28.Text = ((Output[0, 0] - 1) / 2.0 *1000).ToString();
+            textBox27.Text = ((Output[1, 0] + 1) / 2.0 *1000).ToString();
+            textBox26.Text = ((Output[2, 0] - 1) / 2.0 *1000).ToString();
+            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 *1000).ToString();
+            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090*1000).ToString();
+            textBox25.Text = (Output[5, 0] * 0.090 *1000).ToString();
         }
 
         //数据保存按钮触发，创建UpdateSave线程
@@ -444,7 +444,7 @@ namespace ForceSensor
         //解耦按钮触发，创建解耦定时器，调用mytimer_decouple，间隔为50ms
         private void button4_Click(object sender, EventArgs e)
         {
-            mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), this, 0, 100);
+            mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), this, 0, 50);
         }
     }
 }
