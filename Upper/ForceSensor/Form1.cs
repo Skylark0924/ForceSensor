@@ -27,6 +27,7 @@ namespace ForceSensor
         static int num = 0;
         public static double[] zero = new double[6];
         public char[] delimiterChars = { ' ', ',', '\t' };
+        public string Fx, Fy, Fz, Mx, My, Mz;
 
 
         public static Matrix W1 = Matrix.Create(68, 6, new double[] { -0.36014,-0.87604,0.91185,0.77,1.589,-0.9952,
@@ -331,13 +332,14 @@ namespace ForceSensor
         {
             TextBox[] tbs = { textBox17, textBox18, textBox19, textBox20, textBox21, textBox22 };
             this.button2.Enabled = false;
-            if (num < 20)
+            if (num < 2000)
             {
                 for (int i = 0; i < 6; i++)
                 {
                     strmsave.Write(tbs[i].Text + ", ");
 
                 }
+                //strmsave.Write(Fx + ", " + Fy + ", " + Fz + ", " + Mx + ", " + My + ", " + Mz + ", ");
                 strmsave.Write("\n");
             }
             else
@@ -351,7 +353,40 @@ namespace ForceSensor
         //以代理的方式调用UpdateDecouple
         void Mytimer_decouple(object state)
         {
-            this.BeginInvoke(new MyInvoke1(UpdateDecouple));
+            //this.BeginInvoke(new MyInvoke1(UpdateDecouple));
+            double Fa, Fb, Fc, Ma, Mb, Mc;
+
+            Fa = double.Parse(textBox17.Text) - zero[0];
+            Fb = double.Parse(textBox18.Text) - zero[1];
+            Fc = double.Parse(textBox19.Text) - zero[2];
+            Ma = double.Parse(textBox20.Text) - zero[3];
+            Mb = double.Parse(textBox21.Text) - zero[4];
+            Mc = double.Parse(textBox22.Text) - zero[5];
+
+            Matrix Input = Matrix.Create(6, 1, new double[] { Fa, Fb, Fc, Ma, Mb, Mc });
+            Input = Pretreatment(Input);
+
+            Matrix Output_hide = W1 * Input + b1;
+            for (int i = 0; i < 68; i++)
+            {
+                Output_hide[i, 0] = 2 / (1 + Math.Exp(-2 * Output_hide[i, 0])) - 1;
+            }
+
+            Matrix Output = W2 * Output_hide + b2;
+
+            Fx = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
+            Fy = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
+            Fz = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
+            Mx = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
+            My = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
+            Mz = (Output[5, 0] * 0.090 * 1000).ToString();
+
+            textBox28.Text = Fx;
+            textBox27.Text = Fy;
+            textBox26.Text = Fz;
+            textBox23.Text = Mx;
+            textBox24.Text = My;
+            textBox25.Text = Mz;
         }
 
         //更新串口接收
@@ -387,7 +422,7 @@ namespace ForceSensor
         //创建数据保存定时器，调用mytimer_save，间隔为50ms
         private void UpdateSave()
         {
-            strmsave = new StreamWriter("D:\\ForceSensor\\data\\data_z+向上_x+ .txt", true, System.Text.Encoding.Default);
+            strmsave = new StreamWriter("D:\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
             mytimer1 = new System.Threading.Timer(new TimerCallback(Mytimer_save), this, 0, 50);
             num = 0;
         }
@@ -395,32 +430,8 @@ namespace ForceSensor
         //更新解耦结果
         private void UpdateDecouple()
         {
-            double Fa, Fb, Fc, Ma, Mb, Mc;
+            mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), this, 0, 50);
 
-            Fa = double.Parse(textBox17.Text) - zero[0];
-            Fb = double.Parse(textBox18.Text) - zero[1];
-            Fc = double.Parse(textBox19.Text) - zero[2];
-            Ma = double.Parse(textBox20.Text) - zero[3];
-            Mb = double.Parse(textBox21.Text) - zero[4];
-            Mc = double.Parse(textBox22.Text) - zero[5];
-
-            Matrix Input = Matrix.Create(6, 1, new double[] { Fa, Fb, Fc, Ma, Mb, Mc });
-            Input = Pretreatment(Input);
-
-            Matrix Output_hide = W1 * Input + b1;
-            for (int i = 0; i < 68; i++)
-            {
-                Output_hide[i, 0] = 2 / (1 + Math.Exp(-2 * Output_hide[i, 0])) - 1;
-            }
-
-            Matrix Output = W2 * Output_hide + b2;
-
-            textBox28.Text = ((Output[0, 0] - 1) / 2.0 *1000).ToString();
-            textBox27.Text = ((Output[1, 0] + 1) / 2.0 *1000).ToString();
-            textBox26.Text = ((Output[2, 0] - 1) / 2.0 *1000).ToString();
-            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 *1000).ToString();
-            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090*1000).ToString();
-            textBox25.Text = (Output[5, 0] * 0.090 *1000).ToString();
         }
 
         //数据保存按钮触发，创建UpdateSave线程
@@ -444,7 +455,8 @@ namespace ForceSensor
         //解耦按钮触发，创建解耦定时器，调用mytimer_decouple，间隔为50ms
         private void button4_Click(object sender, EventArgs e)
         {
-            mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), this, 0, 50);
+            Thread th1 = new Thread(UpdateDecouple);
+            th1.Start();
         }
     }
 }
