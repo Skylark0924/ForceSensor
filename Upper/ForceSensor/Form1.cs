@@ -5,29 +5,39 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.IO.Ports;
-using System.Threading;
 using LinearAlgebra;
+using System.Diagnostics;
+using System.Timers;
 
 namespace ForceSensor
 {
+    class TimerObject
+    {
+        public int Counter = 0;
+    }
     public partial class Form1 : Form
     {
         SerialPort serialPort1 = new SerialPort();
         SerialPort serialPort2 = new SerialPort();
         public delegate void MyInvoke1();
         public delegate void MyInvoke2();
-        System.Threading.Timer mytimer;
-        System.Threading.Timer mytimer1;
-        System.Threading.Timer mytimer2;
+        public System.Threading.Timer mytimer;
+        public System.Timers.Timer mytimer1;
+        public System.Threading.Timer mytimer2;
         public StreamWriter strmsave;
         static int num = 0;
-        public static double[] zero = new double[6];
+        static int numDec = 0;
+        public static double[] zero = { 0, 0, 0, 0, 0, 0 };
         public char[] delimiterChars = { ' ', ',', '\t' };
-        public string Fx, Fy, Fz, Mx, My, Mz;
+        public static string Fx= "0", Fy = "0", Fz = "0", Mx = "0", My = "0", Mz = "0";
+        public static double Fa, Fb, Fc, Ma, Mb, Mc;
+        private Stopwatch stopWatch = new Stopwatch();
+
 
 
         public static Matrix W1 = Matrix.Create(68, 6, new double[] { -0.36014,-0.87604,0.91185,0.77,1.589,-0.9952,
@@ -223,23 +233,29 @@ namespace ForceSensor
             {
                 if (!serialPort1.IsOpen)
                 {
+                    serialPort1.PortName = "COM19";
                     serialPort1.BaudRate = 9600;//波特率
                     serialPort1.Parity = Parity.None;//无奇偶校验位
                     serialPort1.StopBits = StopBits.One;//一个停止位
 
+                    serialPort2.PortName = "COM20";
                     serialPort2.BaudRate = 9600;//波特率
                     serialPort2.Parity = Parity.None;//无奇偶校验位
                     serialPort2.StopBits = StopBits.One;//一个停止位
 
-                    serialPort1.PortName = comboPortName1.SelectedItem.ToString();
-                    serialPort2.PortName = comboPortName2.SelectedItem.ToString();
+                    //serialPort1.PortName = comboPortName1.SelectedItem.ToString();
+                    //serialPort2.PortName = comboPortName2.SelectedItem.ToString();
 
                     serialPort1.Handshake = Handshake.RequestToSendXOnXOff;
                     serialPort1.Open();
                     serialPort2.Handshake = Handshake.RequestToSendXOnXOff;
                     serialPort2.Open();
 
-            mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), this, 0, 50);
+                    mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), null, 0, 50);
+
+                    strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
+                    //mytimer1 = new System.Threading.Timer(new TimerCallback(Mytimer_save), null, 0, 50);
+                    mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), null, 0, 50);
                     button1.Text = "关闭串口";
                     this.comboPortName1.Enabled = false;
                     this.comboPortName2.Enabled = false;
@@ -286,10 +302,6 @@ namespace ForceSensor
 
                 }
             }
-            else
-            {
-
-            }
             if (str2[0] != "" && str2[1] != "" && str2.Length >= 8 && str2[0] != "\n")
             {
                 float first = float.Parse(str2[0]);
@@ -307,10 +319,17 @@ namespace ForceSensor
             textBox20.Text = (double.Parse(textBox10.Text) - double.Parse(textBox11.Text)).ToString();
             textBox21.Text = (double.Parse(textBox12.Text) - double.Parse(textBox13.Text)).ToString();
             textBox22.Text = (double.Parse(textBox14.Text) - double.Parse(textBox15.Text)).ToString();
+
+            Fa = double.Parse(textBox17.Text) - zero[0];
+            Fb = double.Parse(textBox18.Text) - zero[1];
+            Fc = double.Parse(textBox19.Text) - zero[2];
+            Ma = double.Parse(textBox20.Text) - zero[3];
+            Mb = double.Parse(textBox21.Text) - zero[4];
+            Mc = double.Parse(textBox22.Text) - zero[5];
         }
 
         //数据前处理
-        Matrix Pretreatment(Matrix Input)
+        static Matrix Pretreatment(Matrix Input)
         {
             Matrix Input_temp = new double[6,1];
             for (int i=0;i<6;i++)
@@ -328,18 +347,19 @@ namespace ForceSensor
         }
 
         //将差分后的数据保存到txt文件中
-        void Mytimer_save(object state)
+        void Mytimer_save(Object source, ElapsedEventArgs e)
         {
-            TextBox[] tbs = { textBox17, textBox18, textBox19, textBox20, textBox21, textBox22 };
+            //TextBox[] tbs = { textBox28, textBox27, textBox26, textBox23, textBox24, textBox25 };
+            //TextBox[] tbs = { textBox17, textBox18, textBox19, textBox20, textBox21, textBox22 };
             this.button2.Enabled = false;
-            if (num < 2000)
+            if (num < 20)
             {
-                for (int i = 0; i < 6; i++)
-                {
-                    strmsave.Write(tbs[i].Text + ", ");
-
-                }
-                //strmsave.Write(Fx + ", " + Fy + ", " + Fz + ", " + Mx + ", " + My + ", " + Mz + ", ");
+                //for (int i = 0; i < 6; i++)
+                //{
+                //    if (!string.IsNullOrEmpty(tbs[i].Text))
+                //        strmsave.Write(tbs[i].Text + ", ");
+                //}
+                strmsave.Write(Fx + ", " + Fy + ", " + Fz + ", " + Mx + ", " + My + ", " + Mz);
                 strmsave.Write("\n");
             }
             else
@@ -353,40 +373,33 @@ namespace ForceSensor
         //以代理的方式调用UpdateDecouple
         void Mytimer_decouple(object state)
         {
-            //this.BeginInvoke(new MyInvoke1(UpdateDecouple));
-            double Fa, Fb, Fc, Ma, Mb, Mc;
+            
+            this.BeginInvoke(new MyInvoke1(UpdateDecouple));
 
-            Fa = double.Parse(textBox17.Text) - zero[0];
-            Fb = double.Parse(textBox18.Text) - zero[1];
-            Fc = double.Parse(textBox19.Text) - zero[2];
-            Ma = double.Parse(textBox20.Text) - zero[3];
-            Mb = double.Parse(textBox21.Text) - zero[4];
-            Mc = double.Parse(textBox22.Text) - zero[5];
+            //Matrix Input = Matrix.Create(6, 1, new double[] { Fa, Fb, Fc, Ma, Mb, Mc });
+            //Input = Pretreatment(Input);
 
-            Matrix Input = Matrix.Create(6, 1, new double[] { Fa, Fb, Fc, Ma, Mb, Mc });
-            Input = Pretreatment(Input);
+            //Matrix Output_hide = W1 * Input + b1;
+            //for (int i = 0; i < 68; i++)
+            //{
+            //    Output_hide[i, 0] = 2 / (1 + Math.Exp(-2 * Output_hide[i, 0])) - 1;
+            //}
 
-            Matrix Output_hide = W1 * Input + b1;
-            for (int i = 0; i < 68; i++)
-            {
-                Output_hide[i, 0] = 2 / (1 + Math.Exp(-2 * Output_hide[i, 0])) - 1;
-            }
+            //Matrix Output = W2 * Output_hide + b2;
 
-            Matrix Output = W2 * Output_hide + b2;
+            //Fx = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
+            //Fy = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
+            //Fz = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
+            //Mx = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
+            //My = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
+            //Mz = (Output[5, 0] * 0.090 * 1000).ToString();
 
-            Fx = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
-            Fy = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
-            Fz = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
-            Mx = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
-            My = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
-            Mz = (Output[5, 0] * 0.090 * 1000).ToString();
-
-            textBox28.Text = Fx;
-            textBox27.Text = Fy;
-            textBox26.Text = Fz;
-            textBox23.Text = Mx;
-            textBox24.Text = My;
-            textBox25.Text = Mz;
+            //textBox28.Text = Fx;
+            //textBox27.Text = Fy;
+            //textBox26.Text = Fz;
+            //textBox23.Text = Mx;
+            //textBox24.Text = My;
+            //textBox25.Text = Mz;
         }
 
         //更新串口接收
@@ -422,23 +435,58 @@ namespace ForceSensor
         //创建数据保存定时器，调用mytimer_save，间隔为50ms
         private void UpdateSave()
         {
-            strmsave = new StreamWriter("D:\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
-            mytimer1 = new System.Threading.Timer(new TimerCallback(Mytimer_save), this, 0, 50);
+            //strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
+            //mytimer1 = new System.Timers.Timer();
+            mytimer1 = new System.Timers.Timer(500);
+            // Hook up the Elapsed event for the timer. 
+            mytimer1.Elapsed += Mytimer_save;
+            mytimer1.AutoReset = true;
+            mytimer1.Enabled = true;
             num = 0;
         }
 
         //更新解耦结果
         private void UpdateDecouple()
         {
-            mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), this, 0, 50);
+            textBox29.Text = numDec.ToString();
+            numDec++;
+            Matrix Input = Matrix.Create(6, 1, new double[] { Fa, Fb, Fc, Ma, Mb, Mc });
+            Input = Pretreatment(Input);
 
+            Matrix Output_hide = W1 * Input + b1;
+            for (int i = 0; i < 68; i++)
+            {
+                Output_hide[i, 0] = 2 / (1 + Math.Exp(-2 * Output_hide[i, 0])) - 1;
+            }
+
+            Matrix Output = W2 * Output_hide + b2;
+
+            Fx = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
+            Fy = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
+            Fz = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
+            Mx = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
+            My = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
+            Mz = (Output[5, 0] * 0.090 * 1000).ToString();
+
+            textBox28.Text = Fx;
+            textBox27.Text = Fy;
+            textBox26.Text = Fz;
+            textBox23.Text = Mx;
+            textBox24.Text = My;
+            textBox25.Text = Mz;
+
+            //Mytimer_save(null);
         }
 
         //数据保存按钮触发，创建UpdateSave线程
         private void button2_Click(object sender, EventArgs e)
         {
             Thread th = new Thread(UpdateSave);
+            th.IsBackground = true;
             th.Start();
+            //stopWatch.Start();
+            //Parallel.Invoke(UpdateDecouple, UpdateSave);
+            //stopWatch.Stop();
         }
 
         //设置零点按钮触发
@@ -450,13 +498,26 @@ namespace ForceSensor
             zero[3] = double.Parse(textBox20.Text);
             zero[4] = double.Parse(textBox21.Text);
             zero[5] = double.Parse(textBox22.Text);
+
+
+            
         }
+
 
         //解耦按钮触发，创建解耦定时器，调用mytimer_decouple，间隔为50ms
         private void button4_Click(object sender, EventArgs e)
         {
-            Thread th1 = new Thread(UpdateDecouple);
-            th1.Start();
+            TimerObject s = new TimerObject();
+            //创建委托对象TimerCallback，该委托将被定时调用
+            TimerCallback timerDelegate = new TimerCallback(Mytimer_decouple);
+            //创建一个时间延时2s启动，间隔为1s的定时器
+            mytimer2 = new System.Threading.Timer(timerDelegate, s, 0, 50);
+            numDec = 0;
+            if(numDec>100)
+            {
+                mytimer2.Dispose();
+            }
+            
         }
     }
 }
