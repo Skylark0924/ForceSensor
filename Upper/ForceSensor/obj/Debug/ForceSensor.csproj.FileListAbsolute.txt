@@ -51,4 +51,4 @@ E:\Github\ForceSensor\Upper\ForceSensor\bin\Debug\LinearAlgebra.dll.config
 E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.csproj.CopyComplete
 D:\ForceSensor\Upper\ForceSensor\bin\Debug\LinearAlgebra.dll
 D:\ForceSensor\Upper\ForceSensor\bin\Debug\LinearAlgebra.pdb
-E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.TimerObject.resources
+E:\Github\ForceSensor\Upper\ForceSensor\obj\Debug\ForceSensor.Form1.resources

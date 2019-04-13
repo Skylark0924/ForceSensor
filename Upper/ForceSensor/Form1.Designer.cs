@@ -539,7 +539,7 @@
             // 
             // textBox29
             // 
-            this.textBox29.Location = new System.Drawing.Point(712, 233);
+            this.textBox29.Location = new System.Drawing.Point(702, 223);
             this.textBox29.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox29.Name = "textBox29";
             this.textBox29.Size = new System.Drawing.Size(93, 26);
@@ -606,6 +606,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Click += new System.EventHandler(this.button1_Click);
             this.ResumeLayout(false);
             this.PerformLayout();
 

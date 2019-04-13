@@ -16,18 +16,16 @@ using System.Timers;
 
 namespace ForceSensor
 {
-    class TimerObject
-    {
-        public int Counter = 0;
-    }
     public partial class Form1 : Form
     {
+        public static bool flag = false;
         SerialPort serialPort1 = new SerialPort();
         SerialPort serialPort2 = new SerialPort();
         public delegate void MyInvoke1();
         public delegate void MyInvoke2();
         public System.Threading.Timer mytimer;
-        public System.Timers.Timer mytimer1;
+        System.Timers.Timer timer = new System.Timers.Timer();
+        public System.Timers.Timer mytimer1 = new System.Timers.Timer();
         public System.Threading.Timer mytimer2;
         public StreamWriter strmsave;
         static int num = 0;
@@ -36,9 +34,7 @@ namespace ForceSensor
         public char[] delimiterChars = { ' ', ',', '\t' };
         public static string Fx= "0", Fy = "0", Fz = "0", Mx = "0", My = "0", Mz = "0";
         public static double Fa, Fb, Fc, Ma, Mb, Mc;
-        private Stopwatch stopWatch = new Stopwatch();
-
-
+        
 
         public static Matrix W1 = Matrix.Create(68, 6, new double[] { -0.36014,-0.87604,0.91185,0.77,1.589,-0.9952,
 1.4276,0.45914,0.56556,-1.6494,-1.2747,0.99901,
@@ -252,10 +248,9 @@ namespace ForceSensor
                     serialPort2.Open();
 
                     mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), null, 0, 50);
-
-                    strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
-                    //mytimer1 = new System.Threading.Timer(new TimerCallback(Mytimer_save), null, 0, 50);
-                    mytimer2 = new System.Threading.Timer(new TimerCallback(Mytimer_decouple), null, 0, 50);
+                    timer.Enabled = true;
+                    timer.Interval = 50;
+                    timer.Elapsed += new ElapsedEventHandler(Mytimer_decouple);
                     button1.Text = "关闭串口";
                     this.comboPortName1.Enabled = false;
                     this.comboPortName2.Enabled = false;
@@ -347,7 +342,7 @@ namespace ForceSensor
         }
 
         //将差分后的数据保存到txt文件中
-        void Mytimer_save(Object source, ElapsedEventArgs e)
+        void Mytimer_save()
         {
             //TextBox[] tbs = { textBox28, textBox27, textBox26, textBox23, textBox24, textBox25 };
             //TextBox[] tbs = { textBox17, textBox18, textBox19, textBox20, textBox21, textBox22 };
@@ -361,17 +356,20 @@ namespace ForceSensor
                 //}
                 strmsave.Write(Fx + ", " + Fy + ", " + Fz + ", " + Mx + ", " + My + ", " + Mz);
                 strmsave.Write("\n");
+                num++;
             }
             else
             {
                 strmsave.Close();
                 this.button2.Enabled = true;
+                flag = false;
+                num = 0;
             }
-            num++;
         }
 
         //以代理的方式调用UpdateDecouple
-        void Mytimer_decouple(object state)
+
+        void Mytimer_decouple(object source, ElapsedEventArgs e)
         {
             
             this.BeginInvoke(new MyInvoke1(UpdateDecouple));
@@ -436,11 +434,11 @@ namespace ForceSensor
         private void UpdateSave()
         {
             //strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
-            //mytimer1 = new System.Timers.Timer();
-            mytimer1 = new System.Timers.Timer(500);
-            // Hook up the Elapsed event for the timer. 
-            mytimer1.Elapsed += Mytimer_save;
-            mytimer1.AutoReset = true;
+            ////mytimer1 = new System.Timers.Timer();
+            //mytimer1 = new System.Timers.Timer(50);
+            //// Hook up the Elapsed event for the timer. 
+            //mytimer1.Elapsed += Mytimer_save;
+            //mytimer1.AutoReset = true;
             mytimer1.Enabled = true;
             num = 0;
         }
@@ -461,32 +459,43 @@ namespace ForceSensor
 
             Matrix Output = W2 * Output_hide + b2;
 
-            Fx = ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
-            Fy = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
-            Fz = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
-            Mx = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
-            My = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
-            Mz = (Output[5, 0] * 0.090 * 1000).ToString();
+            textBox28.Text= ((Output[0, 0] - 1) / 2.0 * 1000).ToString();
+            textBox27.Text = ((Output[1, 0] + 1) / 2.0 * 1000).ToString();
+            textBox26.Text = ((Output[2, 0] - 1) / 2.0 * 1000).ToString();
+            textBox23.Text = ((Output[3, 0] + 1) / 2.0 * 0.032 * 1000).ToString();
+            textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
+            textBox25.Text = (Output[5, 0] * 0.090 * 1000).ToString();
 
-            textBox28.Text = Fx;
-            textBox27.Text = Fy;
-            textBox26.Text = Fz;
-            textBox23.Text = Mx;
-            textBox24.Text = My;
-            textBox25.Text = Mz;
+            //textBox28.Text = Fx;
+            //textBox27.Text = Fy;
+            //textBox26.Text = Fz;
+            //textBox23.Text = Mx;
+            //textBox24.Text = My;
+            //textBox25.Text = Mz;
 
             //Mytimer_save(null);
+            Fx = textBox28.Text;
+            Fy = textBox27.Text;
+            Fz = textBox26.Text;
+            Mx = textBox23.Text;
+            My = textBox24.Text;
+            Mz = textBox25.Text;
+            if (flag)
+            {
+                //mytimer1.Interval = 50;
+                //// Hook up the Elapsed event for the timer. 
+                //mytimer1.Elapsed += new ElapsedEventHandler(Mytimer_save);
+                ////mytimer1.AutoReset = true;
+                //mytimer1.Start();
+                Mytimer_save();
+            }
         }
 
         //数据保存按钮触发，创建UpdateSave线程
         private void button2_Click(object sender, EventArgs e)
         {
-            Thread th = new Thread(UpdateSave);
-            th.IsBackground = true;
-            th.Start();
-            //stopWatch.Start();
-            //Parallel.Invoke(UpdateDecouple, UpdateSave);
-            //stopWatch.Stop();
+            flag= true;
+            strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
         }
 
         //设置零点按钮触发
@@ -507,11 +516,8 @@ namespace ForceSensor
         //解耦按钮触发，创建解耦定时器，调用mytimer_decouple，间隔为50ms
         private void button4_Click(object sender, EventArgs e)
         {
-            TimerObject s = new TimerObject();
-            //创建委托对象TimerCallback，该委托将被定时调用
-            TimerCallback timerDelegate = new TimerCallback(Mytimer_decouple);
-            //创建一个时间延时2s启动，间隔为1s的定时器
-            mytimer2 = new System.Threading.Timer(timerDelegate, s, 0, 50);
+            
+            //mytimer2 = new System.Threading.Timer(Mytimer_decouple, null, 0, 50);
             numDec = 0;
             if(numDec>100)
             {
