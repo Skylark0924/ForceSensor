@@ -18,15 +18,14 @@ namespace ForceSensor
 {
     public partial class Form1 : Form
     {
-        public static bool flag = false;
+        public static bool sav_flag = false;
+        public static bool dec_flag = false;
         SerialPort serialPort1 = new SerialPort();
         SerialPort serialPort2 = new SerialPort();
         public delegate void MyInvoke1();
         public delegate void MyInvoke2();
         public System.Threading.Timer mytimer;
-        System.Timers.Timer timer = new System.Timers.Timer();
         public System.Timers.Timer mytimer1 = new System.Timers.Timer();
-        public System.Threading.Timer mytimer2;
         public StreamWriter strmsave;
         static int num = 0;
         static int numDec = 0;
@@ -35,7 +34,6 @@ namespace ForceSensor
         public static string Fx= "0", Fy = "0", Fz = "0", Mx = "0", My = "0", Mz = "0";
         public static double Fa, Fb, Fc, Ma, Mb, Mc;
         
-
         public static Matrix W1 = Matrix.Create(68, 6, new double[] { -0.36014,-0.87604,0.91185,0.77,1.589,-0.9952,
 1.4276,0.45914,0.56556,-1.6494,-1.2747,0.99901,
 0.103,1.5319,0.83492,-1.4185,-0.23379,1.7076,
@@ -214,7 +212,6 @@ namespace ForceSensor
             }
             comboPortName1.SelectedIndex = 0;
             comboPortName2.SelectedIndex = 0;
-
         }
 
         //串口接收按钮触发，创建串口接收定时器，调用mytimer_done，间隔为50ms
@@ -247,27 +244,29 @@ namespace ForceSensor
                     serialPort2.Handshake = Handshake.RequestToSendXOnXOff;
                     serialPort2.Open();
 
-                    mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), null, 0, 50);
-                    timer.Enabled = true;
-                    timer.Interval = 50;
-                    timer.Elapsed += new ElapsedEventHandler(Mytimer_decouple);
+                    //数据接收，Threading.Timer
+                    mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), null, 0, 1000);
+                    //解耦加保存，Timers.Timer
+                    mytimer1.Interval = 1000;
+                    mytimer1.Elapsed += new ElapsedEventHandler(Mytimer_decouple);
+
                     button1.Text = "关闭串口";
                     this.comboPortName1.Enabled = false;
                     this.comboPortName2.Enabled = false;
                 }
                 else
-                {                    
+                {
                     serialPort1.Close();
                     serialPort2.Close();
                     button1.Text = "打开串口";
                     this.comboPortName1.Enabled = true;
                     this.comboPortName2.Enabled = true;
-                }    
+                }
             }
             catch (Exception ee)
             {
                 MessageBox.Show(ee.ToString());
-            }          
+            }
             //this.button1.Enabled = false;
         }
 
@@ -339,6 +338,10 @@ namespace ForceSensor
         void Mytimer_done(object state)
         {
             this.BeginInvoke(new MyInvoke2(UpdateForm));
+            if (dec_flag)
+                mytimer1.Enabled = true;
+            else
+                mytimer1.Enabled = false;
         }
 
         //将差分后的数据保存到txt文件中
@@ -362,13 +365,12 @@ namespace ForceSensor
             {
                 strmsave.Close();
                 this.button2.Enabled = true;
-                flag = false;
+                sav_flag = false;
                 num = 0;
             }
         }
 
         //以代理的方式调用UpdateDecouple
-
         void Mytimer_decouple(object source, ElapsedEventArgs e)
         {
             
@@ -403,44 +405,31 @@ namespace ForceSensor
         //更新串口接收
         private void UpdateForm()
         {
-            serialPort1.DataReceived += SerialPort_DataReceived;
+            //serialPort1.DataReceived += SerialPort_DataReceived;
             //Random ran17 = new Random();
             //Random ran18 = new Random();
             //Random ran19 = new Random();
             //Random ran20 = new Random();
             //Random ran21 = new Random();
             //Random ran22 = new Random();
-            ////int n17 = ran17.Next(10000);
-            ////int n18 = ran18.Next(10000);
-            ////int n19 = ran19.Next(10000);
-            ////int n20 = ran20.Next(10000);
-            ////int n21 = ran21.Next(10000);
-            ////int n22 = ran22.Next(10000);
-            //int n17 = 1000;
-            //int n18 = 1000;
-            //int n19 = 10000;
-            //int n20 = 100;
-            //int n21 = 1000;
-            //int n22 = 1000;
+            //int n17 = ran17.Next(10000);
+            //int n18 = ran18.Next(10000);
+            //int n19 = ran19.Next(10000);
+            //int n20 = ran20.Next(10000);
+            //int n21 = ran21.Next(10000);
+            //int n22 = ran22.Next(1000);
+            ////int n17 = 1000;
+            ////int n18 = 1000;
+            ////int n19 = 10000;
+            ////int n20 = 100;
+            ////int n21 = 1000;
+            ////int n22 = 1000;
             //textBox17.Text = n17.ToString();
             //textBox18.Text = n18.ToString();
             //textBox19.Text = n19.ToString();
             //textBox20.Text = n20.ToString();
             //textBox21.Text = n21.ToString();
             //textBox22.Text = n22.ToString();
-        }
-
-        //创建数据保存定时器，调用mytimer_save，间隔为50ms
-        private void UpdateSave()
-        {
-            //strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
-            ////mytimer1 = new System.Timers.Timer();
-            //mytimer1 = new System.Timers.Timer(50);
-            //// Hook up the Elapsed event for the timer. 
-            //mytimer1.Elapsed += Mytimer_save;
-            //mytimer1.AutoReset = true;
-            mytimer1.Enabled = true;
-            num = 0;
         }
 
         //更新解耦结果
@@ -466,27 +455,16 @@ namespace ForceSensor
             textBox24.Text = ((Output[4, 0] + 1) / 2.0 * 0.090 * 1000).ToString();
             textBox25.Text = (Output[5, 0] * 0.090 * 1000).ToString();
 
-            //textBox28.Text = Fx;
-            //textBox27.Text = Fy;
-            //textBox26.Text = Fz;
-            //textBox23.Text = Mx;
-            //textBox24.Text = My;
-            //textBox25.Text = Mz;
-
-            //Mytimer_save(null);
             Fx = textBox28.Text;
             Fy = textBox27.Text;
             Fz = textBox26.Text;
             Mx = textBox23.Text;
             My = textBox24.Text;
             Mz = textBox25.Text;
-            if (flag)
+
+            //保存
+            if (sav_flag)
             {
-                //mytimer1.Interval = 50;
-                //// Hook up the Elapsed event for the timer. 
-                //mytimer1.Elapsed += new ElapsedEventHandler(Mytimer_save);
-                ////mytimer1.AutoReset = true;
-                //mytimer1.Start();
                 Mytimer_save();
             }
         }
@@ -494,7 +472,7 @@ namespace ForceSensor
         //数据保存按钮触发，创建UpdateSave线程
         private void button2_Click(object sender, EventArgs e)
         {
-            flag= true;
+            sav_flag= true;
             strmsave = new StreamWriter("E:\\Github\\ForceSensor\\data\\test2.txt", true, System.Text.Encoding.Default);
         }
 
@@ -506,24 +484,16 @@ namespace ForceSensor
             zero[2] = double.Parse(textBox19.Text);
             zero[3] = double.Parse(textBox20.Text);
             zero[4] = double.Parse(textBox21.Text);
-            zero[5] = double.Parse(textBox22.Text);
-
-
-            
+            zero[5] = double.Parse(textBox22.Text);      
         }
-
 
         //解耦按钮触发，创建解耦定时器，调用mytimer_decouple，间隔为50ms
         private void button4_Click(object sender, EventArgs e)
         {
-            
-            //mytimer2 = new System.Threading.Timer(Mytimer_decouple, null, 0, 50);
-            numDec = 0;
-            if(numDec>100)
-            {
-                mytimer2.Dispose();
-            }
-            
+            if (mytimer1.Enabled == false)
+                dec_flag = true;
+            else
+                dec_flag = false;
         }
     }
 }
