@@ -37,7 +37,7 @@ def create_placeholders(n_x, n_y):
 def initialize_parameters():
     """
     Initializes parameters to build a neural network with tensorflow. The shapes are:
-                        W1 : [25, 12288]
+                        W1 : [25, 6]
                         b1 : [25, 1]
                         W2 : [12, 25]
                         b2 : [12, 1]
@@ -51,7 +51,7 @@ def initialize_parameters():
     tf.set_random_seed(1)  # so that your "random" numbers match ours
 
     ### START CODE HERE ### (approx. 6 lines of code)
-    W1 = tf.get_variable("W1", [25, 12288], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    W1 = tf.get_variable("W1", [25, 6], initializer=tf.contrib.layers.xavier_initializer(seed=1))
     b1 = tf.get_variable("b1", [25, 1], initializer=tf.zeros_initializer())
     W2 = tf.get_variable("W2", [12, 25], initializer=tf.contrib.layers.xavier_initializer(seed=1))
     b2 = tf.get_variable("b2", [12, 1], initializer=tf.zeros_initializer())
@@ -92,7 +92,7 @@ def compute_cost(z3, Y):
     return cost
 
 
-def model(X_train, Y_train, X_test, Y_test, learning_rate=0.0001,
+def model(X_train, Y_train , X_test=0, Y_test=0, learning_rate=0.0001,
           num_epochs=1500, minibatch_size=32, print_cost=True):
     """
     Implements a three-layer tensorflow neural network: LINEAR->RELU->LINEAR->RELU->LINEAR->SOFTMAX.
@@ -111,10 +111,10 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.0001,
     parameters -- parameters learnt by the model. They can then be used to predict.
     """
 
-    tf.ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
+    tf.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
     seed = 3  # to keep consistent results
-    (n_x, m) = X_train.shape  # (n_x: input size, m : number of examples in the train set)
+    n_x = X_train.shape[0]  # (n_x: input size, m : number of examples in the train set)
     n_y = Y_train.shape[0]  # n_y : output size
     costs = []  # To keep track of the cost
 
@@ -196,6 +196,6 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.0001,
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
         print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}))
-        print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}))
+        # print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}))
 
         return parameters

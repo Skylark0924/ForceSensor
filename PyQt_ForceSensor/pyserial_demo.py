@@ -6,6 +6,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QStyleFactory
 from PyQt5.QtCore import QTimer
 from ForceSensor import Ui_ForceSensor
+import Online_BP
+import numpy as np
 
 
 class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
@@ -19,12 +21,12 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.port_check()
         self.rcv_bytes1 = ''
         self.rcv_bytes2 = ''
-
+        self.X_train = np.zeros(6)
+        self.Y_train = np.zeros(6)
 
         # 接收数据和发送数据数目置零
         self.data_num_received = 0
         # self.data_num_sended = 0
-
 
     def init(self):
         if self.open_flag == 0:
@@ -33,10 +35,13 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         else:
             # 关闭串口按钮
             self.open_button.clicked.connect(self.port_close)
-
+        self.decp_button.clicked.connect(self.decouple_start)
         # 定时器接收数据
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.data_receive)
+
+        self.timer1 = QTimer(self)
+        self.timer1.timeout.connect(self.online_decouple)
 
         # 发送数据按钮
         # self.s3__send_button.clicked.connect(self.data_send)
@@ -73,12 +78,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
     # 打开串口
     def port_open(self):
-        self.ser1.port = self.comboBox.currentText()
+        # self.ser1.port = self.comboBox.currentText()
+        self.ser1.port = '/dev/ttyUSB3'
         self.ser1.baudrate = 9600
         self.ser1.bytesize = 8
         self.ser1.stopbits = 1
 
-        self.ser2.port = self.comboBox_2.currentText()
+        # self.ser2.port = self.comboBox_2.currentText()
+        self.ser2.port = '/dev/ttyUSB2'
         self.ser2.baudrate = 9600
         self.ser2.bytesize = 8
         self.ser2.stopbits = 1
@@ -96,7 +103,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.timer.start(50)
 
         if self.ser1.isOpen() & self.ser2.isOpen():
-            self.open_button.setEnabled(False)
+            self.open_button.setText("关闭串口")
             # self.formGroupBox1.setTitle("串口状态（已开启）")
 
     # 关闭串口
@@ -113,6 +120,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.data_num_received = 0
         self.open_flag = 0
         # self.formGroupBox1.setTitle("串口状态（已关闭）")
+
+    def data_diff(self):
+        self.R1.setText(str(float(self.U2.text()) - float(self.U3.text())))
+        self.R2.setText(str(float(self.U4.text()) - float(self.U5.text())))
+        self.R3.setText(str(float(self.U6.text()) - float(self.U7.text())))
+        self.R4.setText(str(float(self.D2.text()) - float(self.D3.text())))
+        self.R5.setText(str(float(self.D4.text()) - float(self.D5.text())))
+        self.R6.setText(str(float(self.D6.text()) - float(self.D7.text())))
 
     # # 发送数据
     # def data_send(self):
@@ -148,31 +163,30 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.rcv_bytes1 = self.ser1.readline()
         self.rcv_bytes2 = self.ser2.readline()
 
-        data1=str(self.rcv_bytes1).lstrip("b'")
-        data1=data1.rstrip(", \\n'")
-        self.datalist1=data1.split(', ')
+        data1 = str(self.rcv_bytes1).lstrip("b'")
+        data1 = data1.rstrip(", \\n'")
+        self.datalist1 = data1.split(', ')
 
-        data2=str(self.rcv_bytes2).lstrip("b'")
+        data2 = str(self.rcv_bytes2).lstrip("b'")
         data2 = data2.rstrip(", \\n'")
-        self.datalist2=data2.split(', ')
+        self.datalist2 = data2.split(', ')
 
         if self.datalist1[0] != "" \
-                and self.datalist1[0] != "\n" and self.datalist1[0] != "\r\n"\
+                and self.datalist1[0] != "\n" and self.datalist1[0] != "\r\n" \
                 and len(self.datalist1) == 8:
-                first1 = float(self.datalist1[0])
-                if first1 > 2400000 or first1 < 1000:
-                    self.U1.setText(self.datalist1[0])
-                    self.U2.setText(self.datalist1[1])
-                    self.U3.setText(self.datalist1[2])
-                    self.U4.setText(self.datalist1[3])
-                    self.U5.setText(self.datalist1[4])
-                    self.U6.setText(self.datalist1[5])
-                    self.U7.setText(self.datalist1[6])
-                    self.U8.setText(self.datalist1[7])
+            first1 = float(self.datalist1[0])
+            if first1 > 2400000 or first1 < 1000:
+                self.U1.setText(self.datalist1[0])
+                self.U2.setText(self.datalist1[1])
+                self.U3.setText(self.datalist1[2])
+                self.U4.setText(self.datalist1[3])
+                self.U5.setText(self.datalist1[4])
+                self.U6.setText(self.datalist1[5])
+                self.U7.setText(self.datalist1[6])
+                self.U8.setText(self.datalist1[7])
 
-
-        if self.datalist2[0] != ""  \
-                and self.datalist2[0] != "\n" and self.datalist2[0] != "\r\n"\
+        if self.datalist2[0] != "" \
+                and self.datalist2[0] != "\n" and self.datalist2[0] != "\r\n" \
                 and len(self.datalist2) == 8:
             try:
                 first2 = float(self.datalist2[0])
@@ -188,7 +202,27 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
             except:
                 print('Wrong string')
                 None
+            self.data_diff()
 
+    def decouple_start(self):
+        self.timer1.start(50)
+
+    def online_decouple(self):
+        self.Y_train[0] = float(self.label1.toPlainText())
+        self.Y_train[1] = float(self.label2.toPlainText())
+        self.Y_train[2] = float(self.label3.toPlainText())
+        self.Y_train[3] = float(self.label4.toPlainText())
+        self.Y_train[4] = float(self.label5.toPlainText())
+        self.Y_train[5] = float(self.label6.toPlainText())
+
+        self.X_train[0] = float(self.R1.text())
+        self.X_train[1] = float(self.R2.text())
+        self.X_train[2] = float(self.R3.text())
+        self.X_train[3] = float(self.R4.text())
+        self.X_train[4] = float(self.R5.text())
+        self.X_train[5] = float(self.R6.text())
+
+        Online_BP.model(X_train=self.X_train, Y_train=self.Y_train)
 
     # # 定时发送数据
     # def data_send_timer(self):
@@ -216,4 +250,3 @@ if __name__ == '__main__':
     myshow = Pyqt5_Serial()
     myshow.show()
     sys.exit(app.exec_())
-
