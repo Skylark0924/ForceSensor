@@ -6,14 +6,18 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QStyleFactory
 from PyQt5.QtCore import QTimer
 from ForceSensor import Ui_ForceSensor
-import Online_BP
+import tensorflow as tf
+import Online_TF
 import numpy as np
+
 
 
 class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
     def __init__(self):
         super(Pyqt5_Serial, self).__init__()
         self.open_flag = 0
+        self.enter_flag = 0
+        self.para_flag = 0
         self.setupUi(self)
         self.init()
         self.ser1 = serial.Serial()
@@ -21,12 +25,12 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.port_check()
         self.rcv_bytes1 = ''
         self.rcv_bytes2 = ''
-        self.X_train = np.zeros(6)
-        self.Y_train = np.zeros(6)
-
-        # 接收数据和发送数据数目置零
-        self.data_num_received = 0
-        # self.data_num_sended = 0
+        self.X_train = np.zeros((6, 1))
+        self.Y_train = np.zeros((6, 1))
+        self.zero = np.zeros((6, 1))
+        self.parameters = None
+        # Initialize parameters
+        # self.parameters = Online_TF.initialize_parameters()
 
     def init(self):
         if self.open_flag == 0:
@@ -36,12 +40,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
             # 关闭串口按钮
             self.open_button.clicked.connect(self.port_close)
         self.decp_button.clicked.connect(self.decouple_start)
+        self.zero_button.clicked.connect(self.set_zero)
         # 定时器接收数据
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.data_receive)
 
         self.timer1 = QTimer(self)
         self.timer1.timeout.connect(self.online_decouple)
+
 
         # 发送数据按钮
         # self.s3__send_button.clicked.connect(self.data_send)
@@ -69,23 +75,16 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
             self.comboBox.addItem(port[0])
             self.comboBox_2.addItem(port[0])
 
-    # 串口信息
-    # def port_imf(self):
-    #     # 显示选定的串口的详细信息
-    #     imf_s = self.s1__box_2.currentText()
-    #     if imf_s != "":
-    #         self.state_label.setText(self.Com_Dict[self.s1__box_2.currentText()])
-
     # 打开串口
     def port_open(self):
         # self.ser1.port = self.comboBox.currentText()
-        self.ser1.port = '/dev/ttyUSB3'
+        self.ser1.port = '/dev/ttyUSB2'
         self.ser1.baudrate = 9600
         self.ser1.bytesize = 8
         self.ser1.stopbits = 1
 
         # self.ser2.port = self.comboBox_2.currentText()
-        self.ser2.port = '/dev/ttyUSB2'
+        self.ser2.port = '/dev/ttyUSB5'
         self.ser2.baudrate = 9600
         self.ser2.bytesize = 8
         self.ser2.stopbits = 1
@@ -122,12 +121,24 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         # self.formGroupBox1.setTitle("串口状态（已关闭）")
 
     def data_diff(self):
-        self.R1.setText(str(float(self.U2.text()) - float(self.U3.text())))
-        self.R2.setText(str(float(self.U4.text()) - float(self.U5.text())))
-        self.R3.setText(str(float(self.U6.text()) - float(self.U7.text())))
-        self.R4.setText(str(float(self.D2.text()) - float(self.D3.text())))
-        self.R5.setText(str(float(self.D4.text()) - float(self.D5.text())))
-        self.R6.setText(str(float(self.D6.text()) - float(self.D7.text())))
+        try:
+            self.R1.setText(str(float(self.U2.text()) - float(self.U3.text())))
+            self.R2.setText(str(float(self.U4.text()) - float(self.U5.text())))
+            self.R3.setText(str(float(self.U6.text()) - float(self.U7.text())))
+            self.R4.setText(str(float(self.D2.text()) - float(self.D3.text())))
+            self.R5.setText(str(float(self.D4.text()) - float(self.D5.text())))
+            self.R6.setText(str(float(self.D6.text()) - float(self.D7.text())))
+        except:
+            print('Wrong string')
+            None
+
+    def set_zero(self):
+        self.zero[0] = float(self.R1.text())
+        self.zero[1] = float(self.R2.text())
+        self.zero[2] = float(self.R3.text())
+        self.zero[3] = float(self.R4.text())
+        self.zero[4] = float(self.R5.text())
+        self.zero[5] = float(self.R6.text())
 
     # # 发送数据
     # def data_send(self):
@@ -171,11 +182,12 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         data2 = data2.rstrip(", \\n'")
         self.datalist2 = data2.split(', ')
 
-        if self.datalist1[0] != "" \
-                and self.datalist1[0] != "\n" and self.datalist1[0] != "\r\n" \
-                and len(self.datalist1) == 8:
+        # if self.datalist1[0] != "" \
+        #         and self.datalist1[0] != "\n" and self.datalist1[0] != "\r\n" \
+        #         and len(self.datalist1) == 8:
+        if self.enter_flag == 1:
             first1 = float(self.datalist1[0])
-            if first1 > 2400000 or first1 < 1000:
+            if first1 > 2400000 or first1 < 10000:
                 self.U1.setText(self.datalist1[0])
                 self.U2.setText(self.datalist1[1])
                 self.U3.setText(self.datalist1[2])
@@ -185,9 +197,10 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                 self.U7.setText(self.datalist1[6])
                 self.U8.setText(self.datalist1[7])
 
-        if self.datalist2[0] != "" \
-                and self.datalist2[0] != "\n" and self.datalist2[0] != "\r\n" \
-                and len(self.datalist2) == 8:
+        # if self.datalist2[0] != "" \
+        #         and self.datalist2[0] != "\n" and self.datalist2[0] != "\r\n" \
+        #         and len(self.datalist2) == 8:
+        if self.enter_flag == 1:
             try:
                 first2 = float(self.datalist2[0])
                 if first2 < 1000:
@@ -202,27 +215,44 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
             except:
                 print('Wrong string')
                 None
-            self.data_diff()
+        self.enter_flag = 1
+        self.data_diff()
 
     def decouple_start(self):
         self.timer1.start(50)
 
+    def decouple_show(self, z: object) -> object:
+        self.DE1.setText(str(z[0][0]))
+        self.DE2.setText(str(z[1][0]))
+        self.DE3.setText(str(z[2][0]))
+        self.DE4.setText(str(z[3][0]))
+        self.DE5.setText(str(z[4][0]))
+        self.DE6.setText(str(z[5][0]))
+
     def online_decouple(self):
-        self.Y_train[0] = float(self.label1.toPlainText())
-        self.Y_train[1] = float(self.label2.toPlainText())
-        self.Y_train[2] = float(self.label3.toPlainText())
-        self.Y_train[3] = float(self.label4.toPlainText())
-        self.Y_train[4] = float(self.label5.toPlainText())
-        self.Y_train[5] = float(self.label6.toPlainText())
+        self.Y_train[0][0] = float(self.label1.toPlainText())
+        self.Y_train[1][0] = float(self.label2.toPlainText())
+        self.Y_train[2][0] = float(self.label3.toPlainText())
+        self.Y_train[3][0] = float(self.label4.toPlainText())
+        self.Y_train[4][0] = float(self.label5.toPlainText())
+        self.Y_train[5][0] = float(self.label6.toPlainText())
 
-        self.X_train[0] = float(self.R1.text())
-        self.X_train[1] = float(self.R2.text())
-        self.X_train[2] = float(self.R3.text())
-        self.X_train[3] = float(self.R4.text())
-        self.X_train[4] = float(self.R5.text())
-        self.X_train[5] = float(self.R6.text())
+        self.X_train[0][0] = float(self.R1.text())
+        self.X_train[1][0] = float(self.R2.text())
+        self.X_train[2][0] = float(self.R3.text())
+        self.X_train[3][0] = float(self.R4.text())
+        self.X_train[4][0] = float(self.R5.text())
+        self.X_train[5][0] = float(self.R6.text())
 
-        Online_BP.model(X_train=self.X_train, Y_train=self.Y_train)
+        if self.para_flag == 0:
+            self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
+            self.para_flag = 1
+            print("You are already successed at the first time!")
+        else:
+            self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train,
+                                              parameters=self.parameters)
+
+
 
     # # 定时发送数据
     # def data_send_timer(self):
@@ -245,7 +275,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('GTK+'))
     font = app.font()
-    font.setPointSize(16)
+    font.setPointSize(14)
     app.setFont(font)
     myshow = Pyqt5_Serial()
     myshow.show()
