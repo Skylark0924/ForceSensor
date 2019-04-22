@@ -244,13 +244,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.X_train[4][0] = float(self.R5.text())
         self.X_train[5][0] = float(self.R6.text())
 
-        if self.para_flag == 0:
-            self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
-            self.para_flag = 1
-            print("You are already successed at the first time!")
-        else:
-            self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train,
-                                              parameters=self.parameters)
+        # if self.para_flag == 0:
+        self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
+        self.para_flag = 1
+        print("You are already success at the first time!")
+        # else:
+        #     print("You are already success at the second time!")
+        #     self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train,
+        #                                       parameters=self.parameters)
 
 
 

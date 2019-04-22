@@ -8,6 +8,7 @@ import tensorflow as tf
 from tensorflow.python.framework import ops
 from tf_utils import load_dataset, random_mini_batches, convert_to_one_hot, predict
 
+model_path = './saved_model/'
 
 def linear_function():
     """
@@ -209,7 +210,13 @@ def initialize_parameters():
     """
 
     tf.set_random_seed(1)  # so that your "random" numbers match ours
-    tf.Variable
+    # W1 = tf.Variable(tf.random_normal([25, 6], stddev=1), name="W1")
+    # b1 = tf.Variable(tf.zeros([25]), name="b1")
+    # W2 = tf.Variable(tf.random_normal([12, 25], stddev=1), name="W2")
+    # b2 = tf.Variable(tf.zeros(12), name="b2")
+    # W3 = tf.Variable(tf.random_normal([6, 12], stddev=1), name="W3")
+    # b3 = tf.Variable(tf.zeros(6), name="b3")
+
     ### START CODE HERE ### (approx. 6 lines of code)
     W1 = tf.get_variable("W1", [25, 6], initializer=tf.contrib.layers.xavier_initializer(seed=1))
     b1 = tf.get_variable("b1", [25, 1], initializer=tf.zeros_initializer())
@@ -309,25 +316,31 @@ def model(Pyqt5_Serial, X_train, Y_train, parameters=None, X_test=None, Y_test=N
 
     # Create Placeholders of shape (n_x, n_y)
     X, Y = create_placeholders(n_x, n_y)
-
-
-    if Pyqt5_Serial.para_flag == 0:
-        parameters=initialize_parameters()
-
-    # Forward propagation: Build the forward propagation in the tensorflow graph
-    z3 = forward_propagation(X, parameters)
-    # Cost function: Add cost function to tensorflow graph
-    cost = compute_cost(z3, Y)
-
-    # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
     # Initialize all the variables
     init = tf.global_variables_initializer()
     # Start the session to compute the tensorflow graph
+    saver = tf.train.Saver()
     with tf.Session() as sess:
         # Run the initialization
         # Pyqt5_Serial.decouple_show(sess.run(z3))
-        sess.run(init)
+        parameters = initialize_parameters()
+
+        # Forward propagation: Build the forward propagation in the tensorflow graph
+        z3 = forward_propagation(X, parameters)
+        # Cost function: Add cost function to tensorflow graph
+        cost = compute_cost(z3, Y)
+
+        # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
+        optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+
+        if Pyqt5_Serial.para_flag == 0:
+            sess.run(init)
+        else:
+            check_point_path = 'saved_model/'  # 保存好模型的文件路径
+            ckpt = tf.train.get_checkpoint_state(checkpoint_dir=check_point_path)
+            saver.restore(sess, ckpt.model_checkpoint_path)
+            print(Pyqt5_Serial.para_flag)
+            Pyqt5_Serial.para_flag += 1
 
         # Do the training loop
         for epoch in range(num_epochs):
@@ -355,6 +368,8 @@ def model(Pyqt5_Serial, X_train, Y_train, parameters=None, X_test=None, Y_test=N
         # lets save the parameters in a variable
         parameters = sess.run(parameters)
         print("Parameters have been trained!")
+
+        saver.save(sess, model_path+'/model.ckpt')
         # # Calculate the correct predictions
         # correct_prediction = tf.equal(tf.argmax(z3), tf.argmax(Y))
         #
