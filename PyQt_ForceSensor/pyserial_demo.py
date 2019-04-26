@@ -30,7 +30,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.Y_train = np.zeros((6, 1))
         self.zero = np.zeros((6, 1))
         self.parameters = None
-        self.IL=IL()
+        # self.IL=IL()
         # Initialize parameters
         # self.parameters = Online_TF.initialize_parameters()
 
@@ -278,7 +278,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('GTK+'))
     font = app.font()
-    font.setPointSize(14)
+    font.setPointSize(10)
     app.setFont(font)
     myshow = Pyqt5_Serial()
     myshow.show()
