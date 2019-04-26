@@ -8,6 +8,7 @@ from PyQt5.QtCore import QTimer
 from ForceSensor import Ui_ForceSensor
 import tensorflow as tf
 import Online_TF
+from Online_new import IL
 import numpy as np
 
 
@@ -17,7 +18,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         super(Pyqt5_Serial, self).__init__()
         self.open_flag = 0
         self.enter_flag = 0
-        self.para_flag = 0
+        self.para_flag = False
         self.setupUi(self)
         self.init()
         self.ser1 = serial.Serial()
@@ -29,6 +30,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.Y_train = np.zeros((6, 1))
         self.zero = np.zeros((6, 1))
         self.parameters = None
+        self.IL=IL()
         # Initialize parameters
         # self.parameters = Online_TF.initialize_parameters()
 
@@ -84,7 +86,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.ser1.stopbits = 1
 
         # self.ser2.port = self.comboBox_2.currentText()
-        self.ser2.port = '/dev/ttyUSB5'
+        self.ser2.port = '/dev/ttyUSB3'
         self.ser2.baudrate = 9600
         self.ser2.bytesize = 8
         self.ser2.stopbits = 1
@@ -244,14 +246,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.X_train[4][0] = float(self.R5.text())
         self.X_train[5][0] = float(self.R6.text())
 
-        # if self.para_flag == 0:
-        self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
-        self.para_flag = 1
-        print("You are already success at the first time!")
-        # else:
-        #     print("You are already success at the second time!")
-        #     self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train,
-        #                                       parameters=self.parameters)
+        if self.para_flag == False:
+            self.IL.run_global_variables_initializer()
+            self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
+            self.para_flag = True
+            print("You are already success at the first time!")
+        else:
+             print("You are already success at the second time!")
+             self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
 
 
 

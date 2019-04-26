@@ -10,6 +10,7 @@ from tf_utils import load_dataset, random_mini_batches, convert_to_one_hot, pred
 
 model_path = './saved_model/'
 
+
 def linear_function():
     """
     Implements a linear function:
@@ -236,6 +237,24 @@ def initialize_parameters():
     return parameters
 
 
+def get_parameters(Pyqt5_Serial):
+    W1 = Pyqt5_Serial.parameters['W1']
+    b1 = Pyqt5_Serial.parameters['b1']
+    W2 = Pyqt5_Serial.parameters['W2']
+    b2 = Pyqt5_Serial.parameters['b2']
+    W3 = Pyqt5_Serial.parameters['W3']
+    b3 = Pyqt5_Serial.parameters['b3']
+
+    parameters = {"W1": W1,
+                  "b1": b1,
+                  "W2": W2,
+                  "b2": b2,
+                  "W3": W3,
+                  "b3": b3}
+
+    return parameters
+
+
 def forward_propagation(X, parameters):
     """
     Implements the forward propagation for the model: LINEAR -> RELU -> LINEAR -> RELU -> LINEAR -> SOFTMAX
@@ -248,7 +267,6 @@ def forward_propagation(X, parameters):
     Returns:
     Z3 -- the output of the last LINEAR unit
     """
-
     # Retrieve the parameters from the dictionary "parameters"
     W1 = parameters['W1']
     b1 = parameters['b1']
@@ -289,7 +307,7 @@ def compute_cost(Z3, Y):
     return cost
 
 
-def model(Pyqt5_Serial, X_train, Y_train, parameters=None, X_test=None, Y_test=None, learning_rate=0.0001,
+def model(Pyqt5_Serial, X_train, Y_train, X_test=None, Y_test=None, learning_rate=0.0001,
           num_epochs=1, minibatch_size=1, print_cost=True):
     """
     Implements a three-layer tensorflow neural network: LINEAR->RELU->LINEAR->RELU->LINEAR->SOFTMAX.
@@ -315,32 +333,40 @@ def model(Pyqt5_Serial, X_train, Y_train, parameters=None, X_test=None, Y_test=N
     costs = []  # To keep track of the cost
 
     # Create Placeholders of shape (n_x, n_y)
-    X, Y = create_placeholders(n_x, n_y)
+    X, Y = create_placeholders(6, 6)
+
+    # Initialize parameters
+    if Pyqt5_Serial.para_flag == 0:
+        parameters = initialize_parameters()
+    else:
+        parameters = get_parameters(Pyqt5_Serial)
+
+    # Forward propagation: Build the forward propagation in the tensorflow graph
+    z3 = forward_propagation(X, parameters)
+
+    # Cost function: Add cost function to tensorflow graph
+    cost = compute_cost(z3, Y)
+
+    # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+
     # Initialize all the variables
     init = tf.global_variables_initializer()
+
     # Start the session to compute the tensorflow graph
-    saver = tf.train.Saver()
     with tf.Session() as sess:
-        # Run the initialization
+        # Run the initializatio    Pyqt5_Serial.decouple_show(z3)n
         # Pyqt5_Serial.decouple_show(sess.run(z3))
-        parameters = initialize_parameters()
+        # saver = tf.train.Saver()
+        # if Pyqt5_Serial.para_flag == 0:
+        sess.run(init)
 
-        # Forward propagation: Build the forward propagation in the tensorflow graph
-        z3 = forward_propagation(X, parameters)
-        # Cost function: Add cost function to tensorflow graph
-        cost = compute_cost(z3, Y)
-
-        # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
-        optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-
-        if Pyqt5_Serial.para_flag == 0:
-            sess.run(init)
-        else:
-            check_point_path = 'saved_model/'  # 保存好模型的文件路径
-            ckpt = tf.train.get_checkpoint_state(checkpoint_dir=check_point_path)
-            saver.restore(sess, ckpt.model_checkpoint_path)
-            print(Pyqt5_Serial.para_flag)
-            Pyqt5_Serial.para_flag += 1
+        # else:
+        #     check_point_path = 'saved_model/'  # 保存好模型的文件路径
+        #     ckpt = tf.train.get_checkpoint_state(checkpoint_dir=check_point_path)
+        #     saver.restore(sess, ckpt.model_checkpoint_path)
+        #     print(Pyqt5_Serial.para_flag)
+        #     Pyqt5_Serial.para_flag += 1
 
         # Do the training loop
         for epoch in range(num_epochs):
@@ -365,11 +391,12 @@ def model(Pyqt5_Serial, X_train, Y_train, parameters=None, X_test=None, Y_test=N
         # plt.title("Learning rate =" + str(learning_rate))
         # plt.show()
 
-        # lets save the parameters in a variable
-        parameters = sess.run(parameters)
+        output = sess.run(z3, feed_dict={X: X_train})
+        Pyqt5_Serial.decouple_show(output)
+        parameters = sess.run(parameters)  # lets save the parameters in a variable
         print("Parameters have been trained!")
 
-        saver.save(sess, model_path+'/model.ckpt')
+        # saver.save(sess, model_path+'/model.ckpt')
         # # Calculate the correct predictions
         # correct_prediction = tf.equal(tf.argmax(z3), tf.argmax(Y))
         #

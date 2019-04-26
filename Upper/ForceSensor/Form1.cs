@@ -20,12 +20,14 @@ namespace ForceSensor
     {
         public static bool sav_flag = false;
         public static bool dec_flag = false;
+        public static bool enter_flag = false;
         SerialPort serialPort1 = new SerialPort();
         SerialPort serialPort2 = new SerialPort();
         public delegate void MyInvoke1();
         public delegate void MyInvoke2();
         public System.Threading.Timer mytimer;
         public System.Timers.Timer mytimer1 = new System.Timers.Timer();
+        public Thread th;
         public StreamWriter strmsave;
         static int num = 0;
         static int numDec = 0;
@@ -226,12 +228,12 @@ namespace ForceSensor
             {
                 if (!serialPort1.IsOpen)
                 {
-                    serialPort1.PortName = "COM19";
+                    serialPort1.PortName = "COM22";
                     serialPort1.BaudRate = 9600;//波特率
                     serialPort1.Parity = Parity.None;//无奇偶校验位
                     serialPort1.StopBits = StopBits.One;//一个停止位
 
-                    serialPort2.PortName = "COM20";
+                    serialPort2.PortName = "COM23";
                     serialPort2.BaudRate = 9600;//波特率
                     serialPort2.Parity = Parity.None;//无奇偶校验位
                     serialPort2.StopBits = StopBits.One;//一个停止位
@@ -245,9 +247,9 @@ namespace ForceSensor
                     serialPort2.Open();
 
                     //数据接收，Threading.Timer
-                    mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), null, 0, 1000);
+                    mytimer = new System.Threading.Timer(new TimerCallback(Mytimer_done), null, 0, 50);
                     //解耦加保存，Timers.Timer
-                    mytimer1.Interval = 1000;
+                    mytimer1.Interval = 50;
                     mytimer1.Elapsed += new ElapsedEventHandler(Mytimer_decouple);
 
                     button1.Text = "关闭串口";
@@ -284,7 +286,8 @@ namespace ForceSensor
             buff2 = serialPort2.ReadLine();
             buff2 = buff2.Replace(", ", " ");
             string[] str2 = buff2.Split(delimiterChars);
-            if (str1[0] != "" && str1[1] != "" && str1.Length >= 8 && str1[0] != "\n" && str1[0] != "\r\n")
+            //if (str1[0] != "" && str1[1] != "" && str1.Length >= 8 && str1[0] != "\n" && str1[0] != "\r\n")
+            if (enter_flag)
             {
                 float first = float.Parse(str1[0]);
                 if (first > 2400000 || first < 1000)
@@ -296,7 +299,8 @@ namespace ForceSensor
 
                 }
             }
-            if (str2[0] != "" && str2[1] != "" && str2.Length >= 8 && str2[0] != "\n")
+            //if (str2[0] != "" && str2[1] != "" && str2.Length >= 8 && str2[0] != "\n")
+            if (enter_flag)
             {
                 float first = float.Parse(str2[0]);
                 if (first < 1000)
@@ -307,6 +311,7 @@ namespace ForceSensor
                     }
                 }
             }
+            enter_flag = true;
             textBox17.Text = (double.Parse(textBox2.Text) - double.Parse(textBox3.Text)).ToString();
             textBox18.Text = (double.Parse(textBox4.Text) - double.Parse(textBox5.Text)).ToString();
             textBox19.Text = (double.Parse(textBox6.Text) - double.Parse(textBox7.Text)).ToString();
