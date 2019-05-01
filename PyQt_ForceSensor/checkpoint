@@ -1,0 +1,2 @@
+model_checkpoint_path: "para_save_test"
+all_model_checkpoint_paths: "para_save_test"

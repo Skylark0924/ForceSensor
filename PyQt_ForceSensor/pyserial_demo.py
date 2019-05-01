@@ -7,10 +7,9 @@ from PyQt5.QtWidgets import QMessageBox, QStyleFactory
 from PyQt5.QtCore import QTimer
 from ForceSensor import Ui_ForceSensor
 import tensorflow as tf
-import Online_TF
-from Online_new import IL
+from Online_new import model
 import numpy as np
-
+import time, threading
 
 
 class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
@@ -28,8 +27,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.rcv_bytes2 = ''
         self.X_train = np.zeros((6, 1))
         self.Y_train = np.zeros((6, 1))
-        self.zero = np.zeros((6, 1))
+        self.zero = tf.zeros((6, 1))
         self.parameters = None
+        # 定时器接收数据
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.data_receive)
+
+        self.decp_timer = threading.Timer(50, self.online_decouple)
+
         # self.IL=IL()
         # Initialize parameters
         # self.parameters = Online_TF.initialize_parameters()
@@ -41,29 +46,8 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         else:
             # 关闭串口按钮
             self.open_button.clicked.connect(self.port_close)
-        self.decp_button.clicked.connect(self.decouple_start)
+        self.decp_button.clicked.connect(self.decp_start)
         self.zero_button.clicked.connect(self.set_zero)
-        # 定时器接收数据
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.data_receive)
-
-        self.timer1 = QTimer(self)
-        self.timer1.timeout.connect(self.online_decouple)
-
-
-        # 发送数据按钮
-        # self.s3__send_button.clicked.connect(self.data_send)
-
-        # # 定时发送数据
-        # self.timer_send = QTimer()
-        # self.timer_send.timeout.connect(self.data_send)
-        # self.timer_send_cb.stateChanged.connect(self.data_send_timer)
-
-        # # 清除发送窗口
-        # self.s3__clear_button.clicked.connect(self.send_data_clear)
-        #
-        # # 清除接收窗口
-        # self.s2__clear_button.clicked.connect(self.receive_data_clear)
 
     # 串口检测
     def port_check(self):
@@ -79,14 +63,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
     # 打开串口
     def port_open(self):
-        # self.ser1.port = self.comboBox.currentText()
-        self.ser1.port = '/dev/ttyUSB2'
+        self.ser1.port = self.comboBox.currentText()
+        # self.s7er1.port = '/dev/ttyUSB2'
         self.ser1.baudrate = 9600
         self.ser1.bytesize = 8
         self.ser1.stopbits = 1
 
-        # self.ser2.port = self.comboBox_2.currentText()
-        self.ser2.port = '/dev/ttyUSB3'
+        self.ser2.port = self.comboBox_2.currentText()
+        # self.ser2.port = '/dev/ttyUSB3'
         self.ser2.baudrate = 9600
         self.ser2.bytesize = 8
         self.ser2.stopbits = 1
@@ -142,36 +126,6 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.zero[4] = float(self.R5.text())
         self.zero[5] = float(self.R6.text())
 
-    # # 发送数据
-    # def data_send(self):
-    #     if self.ser.isOpen():
-    #         input_s = self.s3__send_text.toPlainText()
-    #         if input_s != "":
-    #             # 非空字符串
-    #             if self.hex_send.isChecked():
-    #                 # hex发送
-    #                 input_s = input_s.strip()
-    #                 send_list = []
-    #                 while input_s != '':
-    #                     try:
-    #                         num = int(input_s[0:2], 16)
-    #                     except ValueError:
-    #                         QMessageBox.critical(self, 'wrong data', '请输入十六进制数据，以空格分开!')
-    #                         return None
-    #                     input_s = input_s[2:].strip()
-    #                     send_list.append(num)
-    #                 input_s = bytes(send_list)
-    #             else:
-    #                 # ascii发送
-    #                 input_s = (input_s + '\r\n').encode('utf-8')
-    #
-    #             num = self.ser.write(input_s)
-    #             self.data_num_sended += num
-    #             self.lineEdit_2.setText(str(self.data_num_sended))
-    #     else:
-    #         pass
-
-    # 接收数据
     def data_receive(self):
         self.rcv_bytes1 = self.ser1.readline()
         self.rcv_bytes2 = self.ser2.readline()
@@ -216,14 +170,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                     self.D8.setText(self.datalist2[7])
             except:
                 print('Wrong string')
-                None
+                return None
         self.enter_flag = 1
         self.data_diff()
 
-    def decouple_start(self):
-        self.timer1.start(50)
+    def decp_start(self):
+        self.decp_timer.start()
 
-    def decouple_show(self, z: object) -> object:
+    def decp_show(self, z):
         self.DE1.setText(str(z[0][0]))
         self.DE2.setText(str(z[1][0]))
         self.DE3.setText(str(z[2][0]))
@@ -245,33 +199,18 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.X_train[3][0] = float(self.R4.text())
         self.X_train[4][0] = float(self.R5.text())
         self.X_train[5][0] = float(self.R6.text())
+        # self.X_train = np.linspace(-1, 1, 6, dtype=np.float32)[:, np.newaxis]
+        # self.noise = np.random.normal(0, 0.05, (6, 1)).astype(np.float32)
+        # self.X_train = self.X_train + self.noise
+        self.R1.setText(str(self.X_train[0][0]))
+        self.R2.setText(str(self.X_train[1][0]))
+        self.R3.setText(str(self.X_train[2][0]))
+        self.R4.setText(str(self.X_train[3][0]))
+        self.R5.setText(str(self.X_train[4][0]))
+        self.R6.setText(str(self.X_train[5][0]))
 
-        if self.para_flag == False:
-            self.IL.run_global_variables_initializer()
-            self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
-            self.para_flag = True
-            print("You are already success at the first time!")
-        else:
-             print("You are already success at the second time!")
-             self.parameters = Online_TF.model(self, X_train=self.X_train, Y_train=self.Y_train)
-
-
-
-    # # 定时发送数据
-    # def data_send_timer(self):
-    #     if self.timer_send_cb.isChecked():
-    #         self.timer_send.start(int(self.lineEdit_3.text()))
-    #         self.lineEdit_3.setEnabled(False)
-    #     else:
-    #         self.timer_send.stop()
-    #         self.lineEdit_3.setEnabled(True)
-    #
-    # # 清除显示
-    # def send_data_clear(self):
-    #     self.s3__send_text.setText("")
-    #
-    # def receive_data_clear(self):
-    #     self.s2__receive_text.setText("")
+        model(self, X_train=self.X_train, Y_train=self.Y_train)
+        self.para_flag = 1
 
 
 if __name__ == '__main__':
