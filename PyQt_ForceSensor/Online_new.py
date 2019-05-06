@@ -82,8 +82,8 @@ class IL:
         saver.save(self.sess, path, write_meta_graph=False)
 
 
-def model(Pyqt5_Serial, X_train, Y_train):
-    if Pyqt5_Serial.para_flag is False:
+def model(WorkThread, X_train, Y_train):
+    if WorkThread.para_flag is False:
         myIL = IL()
     else:
         tf.reset_default_graph()
@@ -96,7 +96,7 @@ def model(Pyqt5_Serial, X_train, Y_train):
                                feed_dict={myIL.xs: X_train, myIL.ys: Y_train})
             myIL.writer.add_summary(rs, i)
             output = myIL.sess.run(myIL.prediction_layer, feed_dict={myIL.xs: X_train})
-            Pyqt5_Serial.decp_show(output)
+            WorkThread.decp_show(output.tolist())
         # print(myIL.sess.run(myIL.layer1, feed_dict={myIL.xs: xtest}))
 
     myIL.save('./para_save_test')  # save learned fc layers

@@ -480,6 +480,9 @@ class Ui_ForceSensor(object):
         self.decp_button = QtWidgets.QPushButton(self.label_data)
         self.decp_button.setGeometry(QtCore.QRect(540, 230, 100, 28))
         self.decp_button.setObjectName("decp_button")
+        self.set_button = QtWidgets.QPushButton(self.label_data)
+        self.set_button.setGeometry(QtCore.QRect(400, 230, 100, 28))
+        self.set_button.setObjectName("set_button")
         ForceSensor.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(ForceSensor)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1353, 31))
@@ -565,4 +568,5 @@ class Ui_ForceSensor(object):
         self.label_50.setText(_translate("ForceSensor", "Mx_label:"))
         self.label_51.setText(_translate("ForceSensor", "Mz_label:"))
         self.decp_button.setText(_translate("ForceSensor", "解耦"))
+        self.set_button.setText(_translate("ForceSensor", "设置"))
 
