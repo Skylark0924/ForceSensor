@@ -6,16 +6,13 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from ForceSensor import Ui_ForceSensor
-import tensorflow as tf
 from Online_new import model
 import numpy as np
-import time
 import threading
+import time
 
 
 class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
-    signalY = pyqtSignal(list)
-
     def __init__(self):
         super(Pyqt5_Serial, self).__init__()
         self.open_flag = False
@@ -39,11 +36,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
         self.decp_thrd = WorkThread()
         self.decp_thrd.output_init.connect(self.decp_show)
-        self.decp_thrd.rand_input.connect(self.input_show)
-        # self.decp_thrd.setIdentity("Decouple_thread")
-        # self.thread = QThread()
-        # self.decp_thrd.moveToThread(self.thread)
-        # self.decp_thrd.trigger.connect(self.online_decouple)
+
         self.init()
 
     def init(self):
@@ -54,7 +47,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
             # 关闭串口按钮
             self.open_button.clicked.connect(self.port_close)
         if self.decp_flag is False:
-            self.decp_button.clicked.connect(lambda: self.decp_thrd.start())
+            self.decp_button.clicked.connect(self.decp_start)
         else:
             self.decp_button.clicked.connect(self.decp_stop)
         # self.set_button.clicked.connect(self.set_label)
@@ -116,12 +109,19 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
     def data_diff(self):
         try:
-            self.R1.setText(str(float(self.U2.text()) - float(self.U3.text())))
-            self.R2.setText(str(float(self.U4.text()) - float(self.U5.text())))
-            self.R3.setText(str(float(self.U6.text()) - float(self.U7.text())))
-            self.R4.setText(str(float(self.D2.text()) - float(self.D3.text())))
-            self.R5.setText(str(float(self.D4.text()) - float(self.D5.text())))
-            self.R6.setText(str(float(self.D6.text()) - float(self.D7.text())))
+            self.X_train[0][0] = float(self.U2.text()) - float(self.U3.text())
+            self.X_train[1][0] = float(self.U4.text()) - float(self.U5.text())
+            self.X_train[2][0] = float(self.U6.text()) - float(self.U7.text())
+            self.X_train[3][0] = float(self.D2.text()) - float(self.D3.text())
+            self.X_train[4][0] = float(self.D4.text()) - float(self.D5.text())
+            self.X_train[5][0] = float(self.D6.text()) - float(self.D7.text())
+            self.R1.setText(str(self.X_train[0][0]))
+            self.R2.setText(str(self.X_train[1][0]))
+            self.R3.setText(str(self.X_train[2][0]))
+            self.R4.setText(str(self.X_train[3][0]))
+            self.R5.setText(str(self.X_train[4][0]))
+            self.R6.setText(str(self.X_train[5][0]))
+            self.decp_thrd.X_train = self.X_train
         except:
             print('Wrong string')
             return None
@@ -147,9 +147,6 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         data2 = data2.rstrip(", \\n'")
         self.datalist2 = data2.split(', ')
 
-        # if self.datalist1[0] != "" \
-        #         and self.datalist1[0] != "\n" and self.datalist1[0] != "\r\n" \
-        #         and len(self.datalist1) == 8:
         if self.enter_flag is True:
             first1 = float(self.datalist1[0])
             if first1 > 2400000 or first1 < 10000:
@@ -162,9 +159,6 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                 self.U7.setText(self.datalist1[6])
                 self.U8.setText(self.datalist1[7])
 
-        # if self.datalist2[0] != "" \
-        #         and self.datalist2[0] != "\n" and self.datalist2[0] != "\r\n" \
-        #         and len(self.datalist2) == 8:
         if self.enter_flag is True:
             try:
                 first2 = float(self.datalist2[0])
@@ -182,40 +176,37 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                 return None
         self.enter_flag = True
         self.data_diff()
+        # self.set_input()
 
     '''
     Online demarcate & decouple
     '''
 
-    # def set_label(self):
-    #     self.Y_train[0][0] = float(self.label1.toPlainText())
-    #     self.Y_train[1][0] = float(self.label2.toPlainText())
-    #     self.Y_train[2][0] = float(self.label3.toPlainText())
-    #     self.Y_train[3][0] = float(self.label4.toPlainText())
-    #     self.Y_train[4][0] = float(self.label5.toPlainText())
-    #     self.Y_train[5][0] = float(self.label6.toPlainText())
-    #     self.signalY.emit(self.Y_train.tolist())
-
-    def input_show(self, X_train):
-        self.R1.setText(str(X_train[0][0]))
-        self.R2.setText(str(X_train[1][0]))
-        self.R3.setText(str(X_train[2][0]))
-        self.R4.setText(str(X_train[3][0]))
-        self.R5.setText(str(X_train[4][0]))
-        self.R6.setText(str(X_train[5][0]))
-
-    def decp_start(self):
-        # self.decp_timer = QTimer(self)
-        # self.decp_timer.timeout.connect(self.online_decouple)
-        # self.decp_timer.start(500)
-        self.decp_thrd.start()
+    def set_label(self):
         self.Y_train[0][0] = float(self.label1.toPlainText())
         self.Y_train[1][0] = float(self.label2.toPlainText())
         self.Y_train[2][0] = float(self.label3.toPlainText())
         self.Y_train[3][0] = float(self.label4.toPlainText())
         self.Y_train[4][0] = float(self.label5.toPlainText())
         self.Y_train[5][0] = float(self.label6.toPlainText())
-        self.signalY.emit(self.Y_train.tolist())
+        self.decp_thrd.Y_train = self.Y_train
+
+    def set_input(self):
+        self.X_train = np.linspace(-1, 1, 6, dtype=np.float32)[:, np.newaxis]
+        self.noise = np.random.normal(0, 0.05, (6, 1)).astype(np.float32)
+        self.X_train = self.X_train + self.noise
+        self.decp_thrd.X_train = self.X_train
+        self.R1.setText(str(self.X_train[0][0]))
+        self.R2.setText(str(self.X_train[1][0]))
+        self.R3.setText(str(self.X_train[2][0]))
+        self.R4.setText(str(self.X_train[3][0]))
+        self.R5.setText(str(self.X_train[4][0]))
+        self.R6.setText(str(self.X_train[5][0]))
+        time.sleep(1)
+
+    def decp_start(self):
+        self.set_label()
+        self.decp_thrd.start()
 
     def decp_show(self, z):
         self.DE1.setText(str(z[0][0]))
@@ -225,61 +216,31 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.DE5.setText(str(z[4][0]))
         self.DE6.setText(str(z[5][0]))
 
-    # def online_decouple(self):
-    #
-    #     # self.X_train[0][0] = float(self.R1.text())
-    #     # self.X_train[1][0] = float(self.R2.text())
-    #     # self.X_train[2][0] = float(self.R3.text())
-    #     # self.X_train[3][0] = float(self.R4.text())
-    #     # self.X_train[4][0] = float(self.R5.text())
-    #     # self.X_train[5][0] = float(self.R6.text())
-    #     self.X_train = np.linspace(-1, 1, 6, dtype=np.float32)[:, np.newaxis]
-    #     self.noise = np.random.normal(0, 0.05, (6, 1)).astype(np.float32)
-    #     self.X_train = self.X_train + self.noise
-    #     self.R1.setText(str(self.X_train[0][0]))
-    #     self.R2.setText(str(self.X_train[1][0]))
-    #     self.R3.setText(str(self.X_train[2][0]))
-    #     self.R4.setText(str(self.X_train[3][0]))
-    #     self.R5.setText(str(self.X_train[4][0]))
-    #     self.R6.setText(str(self.X_train[5][0]))
-    #
-    #     # print('当前线程数为{}'.format(threading.activeCount()))
-    #     # model(self, X_train=self.X_train, Y_train=self.Y_train)
-    #     #
-    #     # self.para_flag = True
-    #
-    #     # decp_timer.start()
-
 
 class WorkThread(QThread):
     output_init = pyqtSignal(list)
-    rand_input=pyqtSignal(list)
 
     def __int__(self, parent=None):
         # 初始化函数，默认
         super(WorkThread, self).__init__()
-        # self.Y_train = None
-
+        self.Y_train = None
+        self.X_train = None
 
     def run(self):
-        self.Y_train = np.zeros([6, 1])
         self.para_flag = False
+
         def online_decouple():
-            self.X_train = np.linspace(-1, 1, 6, dtype=np.float32)[:, np.newaxis]
-            self.noise = np.random.normal(0, 0.05, (6, 1)).astype(np.float32)
-            self.X_train = self.X_train + self.noise
             print('当前线程数为{}'.format(threading.activeCount()))
             model(self, X_train=self.X_train, Y_train=self.Y_train)
             self.para_flag = True
-            self.rand_input.emit(self.X_train.tolist())
 
         print('已经开启新线程，离成功更进了一步！')
         while True:
             online_decouple()
+            time.sleep(1)
 
     def decp_show(self, z):
         self.output_init.emit(z)
-
 
 
 if __name__ == '__main__':
