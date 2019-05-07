@@ -260,6 +260,7 @@ class WorkThread(QThread):
         super(WorkThread, self).__init__()
         # self.Y_train = None
 
+
     def run(self):
         self.Y_train = np.zeros([6, 1])
         self.para_flag = False

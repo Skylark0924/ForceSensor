@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9873a8ed-42a6-41b7-a335-f2c197cf98f4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/para_save_test.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/para_save_test.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/para_save_test.index" beforeDir="false" afterPath="$PROJECT_DIR$/para_save_test.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyserial_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyserial_demo.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,22 +16,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="276" column="29" lean-forward="true" selection-start-line="276" selection-start-column="29" selection-end-line="276" selection-end-column="29" />
+            <state relative-caret-position="858">
+              <caret line="256" selection-start-line="256" selection-end-line="256" />
               <folding>
                 <element signature="e#21#31#0" expanded="true" />
-                <element signature="e#1773#2122#0" />
+                <element signature="e#427#1407#0" />
                 <element signature="e#2387#3183#0" />
-                <element signature="e#3011#3238#0" />
-                <element signature="e#3273#3831#0" />
-                <element signature="e#4164#6115#0" />
-                <element signature="e#6254#6276#0" />
-                <element signature="e#6889#7174#0" />
-                <element signature="e#6731#7316#0" />
-                <element signature="e#6153#6378#0" />
-                <element signature="e#7591#7619#0" />
-                <element signature="e#8448#8675#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://D:/Anaconda/Lib/site-packages/PyQt5/QtCore.pyi">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="248">
+              <caret line="30" column="8" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -40,8 +39,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Online_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+            <state relative-caret-position="1562">
+              <caret line="102" selection-start-line="102" selection-end-line="102" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
                 <element signature="e#136#310#0" />
@@ -135,10 +134,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="1487" />
-    <option name="width" value="1524" />
-    <option name="height" value="2012" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="1485" />
+    <option name="width" value="1526" />
+    <option name="height" value="2014" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -433,7 +432,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="661" y="0" width="677" height="894" extended-state="1" />
+    <frame x="-6" y="-6" width="1346" height="901" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.4409938" />
@@ -441,7 +440,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32914287" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7362805" visible="true" weight="0.29973823" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7362805" weight="0.29973823" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7450593" weight="0.30366492" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -539,13 +538,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/Anaconda/Lib/site-packages/PyQt5/QtCore.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="7504" column="5" lean-forward="true" selection-start-line="7504" selection-start-column="5" selection-end-line="7504" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/1310655275/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -562,8 +554,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Online_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+        <state relative-caret-position="1562">
+          <caret line="102" selection-start-line="102" selection-end-line="102" />
           <folding>
             <element signature="e#24#33#0" expanded="true" />
             <element signature="e#136#310#0" />
@@ -574,23 +566,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/Anaconda/Lib/site-packages/PyQt5/QtCore.pyi">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="30" column="8" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="276" column="29" lean-forward="true" selection-start-line="276" selection-start-column="29" selection-end-line="276" selection-end-column="29" />
+        <state relative-caret-position="858">
+          <caret line="256" selection-start-line="256" selection-end-line="256" />
           <folding>
             <element signature="e#21#31#0" expanded="true" />
-            <element signature="e#1773#2122#0" />
+            <element signature="e#427#1407#0" />
             <element signature="e#2387#3183#0" />
-            <element signature="e#3011#3238#0" />
-            <element signature="e#3273#3831#0" />
-            <element signature="e#4164#6115#0" />
-            <element signature="e#6254#6276#0" />
-            <element signature="e#6889#7174#0" />
-            <element signature="e#6731#7316#0" />
-            <element signature="e#6153#6378#0" />
-            <element signature="e#7591#7619#0" />
-            <element signature="e#8448#8675#0" />
           </folding>
         </state>
       </provider>
