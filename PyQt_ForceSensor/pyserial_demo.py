@@ -30,7 +30,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.rcv_bytes2 = ''
         self.X_train = np.zeros((6, 1))
         self.Y_train = np.zeros((6, 1))
-        self.zero = tf.zeros((6, 1))
+        self.zero = np.zeros((6, 1))
         self.parameters = None
 
         # 定时器接收数据
@@ -133,6 +133,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.zero[3] = float(self.R4.text())
         self.zero[4] = float(self.R5.text())
         self.zero[5] = float(self.R6.text())
+        print(self.zero)
 
     def data_receive(self):
         self.rcv_bytes1 = self.ser1.readline()

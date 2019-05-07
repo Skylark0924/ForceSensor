@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9873a8ed-42a6-41b7-a335-f2c197cf98f4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ForceSensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/ForceSensor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Online_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/Online_new.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/para_save_test.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/para_save_test.data-00000-of-00001" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/para_save_test.index" beforeDir="false" afterPath="$PROJECT_DIR$/para_save_test.index" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyserial_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyserial_demo.py" afterDir="false" />
@@ -20,19 +17,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="199" column="28" selection-start-line="199" selection-start-column="28" selection-end-line="199" selection-end-column="28" />
+            <state relative-caret-position="295">
+              <caret line="276" column="29" lean-forward="true" selection-start-line="276" selection-start-column="29" selection-end-line="276" selection-end-column="29" />
               <folding>
                 <element signature="e#21#31#0" expanded="true" />
                 <element signature="e#1773#2122#0" />
-                <element signature="e#2168#2964#0" />
+                <element signature="e#2387#3183#0" />
                 <element signature="e#3011#3238#0" />
                 <element signature="e#3273#3831#0" />
-                <element signature="e#3865#4126#0" />
                 <element signature="e#4164#6115#0" />
                 <element signature="e#6254#6276#0" />
+                <element signature="e#6889#7174#0" />
                 <element signature="e#6731#7316#0" />
                 <element signature="e#6153#6378#0" />
+                <element signature="e#7591#7619#0" />
                 <element signature="e#8448#8675#0" />
               </folding>
             </state>
@@ -137,7 +135,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="1487" />
     <option name="width" value="1524" />
     <option name="height" value="2012" />
@@ -435,7 +433,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="661" y="0" width="677" height="894" extended-state="0" />
+    <frame x="661" y="0" width="677" height="894" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.4409938" />
@@ -578,19 +576,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="199" column="28" selection-start-line="199" selection-start-column="28" selection-end-line="199" selection-end-column="28" />
+        <state relative-caret-position="295">
+          <caret line="276" column="29" lean-forward="true" selection-start-line="276" selection-start-column="29" selection-end-line="276" selection-end-column="29" />
           <folding>
             <element signature="e#21#31#0" expanded="true" />
             <element signature="e#1773#2122#0" />
-            <element signature="e#2168#2964#0" />
+            <element signature="e#2387#3183#0" />
             <element signature="e#3011#3238#0" />
             <element signature="e#3273#3831#0" />
-            <element signature="e#3865#4126#0" />
             <element signature="e#4164#6115#0" />
             <element signature="e#6254#6276#0" />
+            <element signature="e#6889#7174#0" />
             <element signature="e#6731#7316#0" />
             <element signature="e#6153#6378#0" />
+            <element signature="e#7591#7619#0" />
             <element signature="e#8448#8675#0" />
           </folding>
         </state>
