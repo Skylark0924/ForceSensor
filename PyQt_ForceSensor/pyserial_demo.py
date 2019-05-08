@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from ForceSensor import Ui_ForceSensor
-from Online_new import model
+from Online_new import *
 import numpy as np
 import threading
 import time
@@ -19,6 +19,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.enter_flag = False
         self.para_flag = False
         self.decp_flag = False
+        self.test_flag = False
         self.setupUi(self)
         self.ser1 = serial.Serial()
         self.ser2 = serial.Serial()
@@ -46,11 +47,17 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         else:
             # 关闭串口按钮
             self.open_button.clicked.connect(self.port_close)
+
         if self.decp_flag is False:
             self.decp_button.clicked.connect(self.decp_start)
         else:
             self.decp_button.clicked.connect(self.decp_stop)
-        # self.set_button.clicked.connect(self.set_label)
+
+        if self.test_flag is False:
+            self.set_button.clicked.connect(self.test_start)
+        else:
+            self.set_button.clicked.connect(self.test_stop)
+
         self.zero_button.clicked.connect(self.set_zero)
 
     # 串口检测
@@ -107,25 +114,6 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.open_button.setEnabled(True)
         self.open_flag = False
 
-    def data_diff(self):
-        try:
-            self.X_train[0][0] = float(self.U2.text()) - float(self.U3.text())
-            self.X_train[1][0] = float(self.U4.text()) - float(self.U5.text())
-            self.X_train[2][0] = float(self.U6.text()) - float(self.U7.text())
-            self.X_train[3][0] = float(self.D2.text()) - float(self.D3.text())
-            self.X_train[4][0] = float(self.D4.text()) - float(self.D5.text())
-            self.X_train[5][0] = float(self.D6.text()) - float(self.D7.text())
-            self.R1.setText(str(self.X_train[0][0]))
-            self.R2.setText(str(self.X_train[1][0]))
-            self.R3.setText(str(self.X_train[2][0]))
-            self.R4.setText(str(self.X_train[3][0]))
-            self.R5.setText(str(self.X_train[4][0]))
-            self.R6.setText(str(self.X_train[5][0]))
-            self.decp_thrd.X_train = self.X_train
-        except:
-            print('Wrong string')
-            return None
-
     def set_zero(self):
         self.zero[0] = float(self.R1.text())
         self.zero[1] = float(self.R2.text())
@@ -133,7 +121,28 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.zero[3] = float(self.R4.text())
         self.zero[4] = float(self.R5.text())
         self.zero[5] = float(self.R6.text())
-        print(self.zero)
+
+    def data_diff(self):
+        try:
+            self.X_train[0][0] = float(self.U2.text()) - float(self.U3.text()) - self.zero[0]
+            self.X_train[1][0] = float(self.U4.text()) - float(self.U5.text()) - self.zero[1]
+            self.X_train[2][0] = float(self.U6.text()) - float(self.U7.text()) - self.zero[2]
+            self.X_train[3][0] = float(self.D2.text()) - float(self.D3.text()) - self.zero[3]
+            self.X_train[4][0] = float(self.D4.text()) - float(self.D5.text()) - self.zero[4]
+            self.X_train[5][0] = float(self.D6.text()) - float(self.D7.text()) - self.zero[5]
+            self.R1.setText(str(self.X_train[0][0]))
+            self.R2.setText(str(self.X_train[1][0]))
+            self.R3.setText(str(self.X_train[2][0]))
+            self.R4.setText(str(self.X_train[3][0]))
+            self.R5.setText(str(self.X_train[4][0]))
+            self.R6.setText(str(self.X_train[5][0]))
+            if self.decp_flag:
+                self.decp_thrd.X_train = self.X_train
+            if self.test_flag:
+                self.decp_thrd.X_test = self.X_train
+        except:
+            print('Wrong string')
+            return None
 
     def data_receive(self):
         self.rcv_bytes1 = self.ser1.readline()
@@ -208,6 +217,11 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.set_label()
         self.decp_thrd.start()
 
+    def decp_stop(self):
+        self.decp_thrd.stop()
+        self.decp_thrd.quit()
+        self.decp_thrd.wait()
+
     def decp_show(self, z):
         self.DE1.setText(str(z[0][0]))
         self.DE2.setText(str(z[1][0]))
@@ -215,6 +229,20 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.DE4.setText(str(z[3][0]))
         self.DE5.setText(str(z[4][0]))
         self.DE6.setText(str(z[5][0]))
+
+    '''
+    Test and Using
+    '''
+
+    def test_start(self):
+        self.decp_thrd.test_flag = True
+        self.decp_thrd.start()
+
+    def test_stop(self):
+        self.decp_thrd.test_flag = False
+        self.decp_thrd.stop()
+        self.decp_thrd.quit()
+        self.decp_thrd.wait()
 
 
 class WorkThread(QThread):
@@ -225,22 +253,33 @@ class WorkThread(QThread):
         super(WorkThread, self).__init__()
         self.Y_train = None
         self.X_train = None
+        self.X_test = None
+        self._isRunning = True
+        self.test_flag = False
 
     def run(self):
         self.para_flag = False
+        if self.test_flag is False:
+            def online_decouple():
+                print('当前线程数为{}'.format(threading.activeCount()))
+                model(self, X_train=self.X_train, Y_train=self.Y_train)
+                self.para_flag = True
 
-        def online_decouple():
-            print('当前线程数为{}'.format(threading.activeCount()))
-            model(self, X_train=self.X_train, Y_train=self.Y_train)
-            self.para_flag = True
+            print('已经开启新线程，离成功更进了一步！')
+            while self._isRunning:
+                online_decouple()
+                time.sleep(1)
 
-        print('已经开启新线程，离成功更进了一步！')
-        while True:
-            online_decouple()
-            time.sleep(1)
+        else:
+            while self._isRunning:
+                test(self, X_test=self.X_test)
+                time.sleep(1)
 
     def decp_show(self, z):
         self.output_init.emit(z)
+
+    def stop(self):
+        self._isRunning = False
 
 
 if __name__ == '__main__':

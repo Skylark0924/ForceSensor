@@ -100,3 +100,9 @@ def model(WorkThread, X_train, Y_train):
         # print(myIL.sess.run(myIL.layer1, feed_dict={myIL.xs: xtest}))
 
     myIL.save('./para_save_test')  # save learned fc layers
+
+
+def test(WorkThread, X_test):
+    myIL = IL(restore_from='./para_save_test')
+    output = myIL.sess.run(myIL.prediction_layer, feed_dict={myIL.xs: X_test})
+    WorkThread.decp_show(output.tolist())
