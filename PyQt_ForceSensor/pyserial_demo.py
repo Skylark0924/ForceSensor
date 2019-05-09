@@ -11,6 +11,9 @@ import numpy as np
 import threading
 import time
 
+global i
+i = 0
+
 
 class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
     def __init__(self):
@@ -20,6 +23,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.para_flag = False
         self.decp_flag = False
         self.test_flag = False
+        self.zero_flag = False
         self.setupUi(self)
         self.ser1 = serial.Serial()
         self.ser2 = serial.Serial()
@@ -38,7 +42,9 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.decp_thrd = WorkThread()
         self.decp_thrd.output_init.connect(self.decp_show)
 
-        self.init()
+        self.init_timer = QTimer(self)
+        self.init_timer.timeout.connect(self.init)
+        self.init_timer.start(1000)
 
     def init(self):
         if self.open_flag is False:
@@ -53,12 +59,12 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         else:
             self.decp_button.clicked.connect(self.decp_stop)
 
-        if self.test_flag is False:
+        if self.test_flag is True:
             self.set_button.clicked.connect(self.test_start)
         else:
             self.set_button.clicked.connect(self.test_stop)
-
-        self.zero_button.clicked.connect(self.set_zero)
+        if self.zero_flag is False:
+            self.zero_button.clicked.connect(self.set_zero)
 
     # 串口检测
     def port_check(self):
@@ -74,74 +80,85 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
     # 打开串口
     def port_open(self):
-        self.ser1.port = self.comboBox.currentText()
-        # self.ser1.port = '/dev/ttyUSB2'
-        self.ser1.baudrate = 9600
-        self.ser1.bytesize = 8
-        self.ser1.stopbits = 1
+        if self.open_flag is False:
+            # self.ser1.port = self.comboBox.currentText()
+            # self.ser1.port = '/dev/ttyUSB2'
+            self.ser1.port = 'COM5'
+            self.ser1.baudrate = 9600
+            self.ser1.bytesize = 8
+            self.ser1.stopbits = 1
 
-        self.ser2.port = self.comboBox_2.currentText()
-        # self.ser2.port = '/dev/ttyUSB3'
-        self.ser2.baudrate = 9600
-        self.ser2.bytesize = 8
-        self.ser2.stopbits = 1
+            # self.ser2.port = self.comboBox_2.currentText()
+            # self.ser2.port = '/dev/ttyUSB3'
+            self.ser2.port = 'COM6'
+            self.ser2.baudrate = 9600
+            self.ser2.bytesize = 8
+            self.ser2.stopbits = 1
 
-        self.open_flag = True
+            self.open_flag = True
 
-        try:
-            self.ser1.open()
-            self.ser2.open()
-        except:
-            QMessageBox.critical(self, "Port Error", "此串口不能被打开！")
-            return None
+            try:
+                self.ser1.open()
+                self.ser2.open()
+            except:
+                QMessageBox.critical(self, "Port Error", "此串口不能被打开！")
+                return None
 
-        # 打开串口接收定时器，周期为50ms
-        self.timer.start(50)
+            # 打开串口接收定时器，周期为50ms
+            self.timer.start(50)
 
-        if self.ser1.isOpen() & self.ser2.isOpen():
-            self.open_button.setText("关闭串口")
-            # self.formGroupBox1.setTitle("串口状态（已开启）")
+            if self.ser1.isOpen() & self.ser2.isOpen():
+                self.open_button.setText("关闭串口")
+                # self.formGroupBox1.setTitle("串口状态（已开启）")
 
     # 关闭串口
     def port_close(self):
-        self.timer.stop()
-        self.timer_send.stop()
-        try:
-            self.ser1.close()
-            self.ser2.close()
-        except:
-            pass
-        self.open_button.setEnabled(True)
-        self.open_flag = False
+        if self.open_flag is True:
+            self.timer.stop()
+            try:
+                self.ser1.close()
+                self.ser2.close()
+            except:
+                pass
+            self.open_button.setText("打开串口")
+            self.open_button.setEnabled(True)
+            self.open_flag = False
 
     def set_zero(self):
-        self.zero[0] = float(self.R1.text())
-        self.zero[1] = float(self.R2.text())
-        self.zero[2] = float(self.R3.text())
-        self.zero[3] = float(self.R4.text())
-        self.zero[4] = float(self.R5.text())
-        self.zero[5] = float(self.R6.text())
-        print("Set Zero Success!")
+        if self.zero_flag is False:
+            self.zero[0] = float(self.R1.text())
+            self.zero[1] = float(self.R2.text())
+            self.zero[2] = float(self.R3.text())
+            self.zero[3] = float(self.R4.text())
+            self.zero[4] = float(self.R5.text())
+            self.zero[5] = float(self.R6.text())
+            print("Set Zero Success!")
+            self.zero_flag = True
 
     def data_diff(self):
+        global i
         try:
-            self.X_train[0][0] = float(self.U2.text()) - float(self.U3.text()) - self.zero[0]
-            self.X_train[1][0] = float(self.U4.text()) - float(self.U5.text()) - self.zero[1]
-            self.X_train[2][0] = float(self.U6.text()) - float(self.U7.text()) - self.zero[2]
-            self.X_train[3][0] = float(self.D2.text()) - float(self.D3.text()) - self.zero[3]
-            self.X_train[4][0] = float(self.D4.text()) - float(self.D5.text()) - self.zero[4]
-            self.X_train[5][0] = float(self.D6.text()) - float(self.D7.text()) - self.zero[5]
-            self.R1.setText(str(self.X_train[0][0]))
-            self.R2.setText(str(self.X_train[1][0]))
-            self.R3.setText(str(self.X_train[2][0]))
-            self.R4.setText(str(self.X_train[3][0]))
-            self.R5.setText(str(self.X_train[4][0]))
-            self.R6.setText(str(self.X_train[5][0]))
+            self.X_train[0][i] = float(self.U2.text()) - float(self.U3.text()) - self.zero[0]
+            self.X_train[1][i] = float(self.U4.text()) - float(self.U5.text()) - self.zero[1]
+            self.X_train[2][i] = float(self.U6.text()) - float(self.U7.text()) - self.zero[2]
+            self.X_train[3][i] = float(self.D2.text()) - float(self.D3.text()) - self.zero[3]
+            self.X_train[4][i] = float(self.D4.text()) - float(self.D5.text()) - self.zero[4]
+            self.X_train[5][i] = float(self.D6.text()) - float(self.D7.text()) - self.zero[5]
+            self.R1.setText(str(self.X_train[0][i]))
+            self.R2.setText(str(self.X_train[1][i]))
+            self.R3.setText(str(self.X_train[2][i]))
+            self.R4.setText(str(self.X_train[3][i]))
+            self.R5.setText(str(self.X_train[4][i]))
+            self.R6.setText(str(self.X_train[5][i]))
+            i = i + 1
+            print(i)
 
-            if self.test_flag:
-                self.decp_thrd.X_test = self.X_train
-            else:
-                self.decp_thrd.X_train = self.X_train
+            if i is 100:
+                if self.test_flag:
+                    self.decp_thrd.X_test = self.X_train
+                else:
+                    self.decp_thrd.X_train = self.X_train
+                i = 0
         except:
             print('Wrong string')
             return None
@@ -216,20 +233,24 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         time.sleep(1)
 
     def decp_start(self):
-        self.decp_thrd._isRunning = True
-        self.decp_thrd.test_flag = False
-        self.decp_flag = True
-        self.set_label()
-        time.sleep(1)
-        self.decp_thrd.start()
-        print("Decouple Start")
+        if self.decp_flag is False:
+            self.decp_thrd._isRunning = True
+            self.decp_thrd.test_flag = False
+            self.decp_flag = True
+            self.set_label()
+            time.sleep(1)
+            self.decp_thrd.start()
+            print("Decouple Start")
 
     def decp_stop(self):
-        self.decp_flag = False
-        self.decp_thrd.stop()
-        self.decp_thrd.quit()
-        self.decp_thrd.wait()
-        print("Decouple Stop")
+        if self.decp_flag is True:
+            self.decp_thrd._isRunning = False
+            self.decp_flag = False
+            self.test_flag = True
+            # self.decp_thrd.stop()
+            self.decp_thrd.quit()
+            self.decp_thrd.wait()
+            print("Decouple Stop")
 
     def decp_show(self, z):
         self.DE1.setText(str(z[0][0]))
@@ -244,14 +265,19 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
     '''
 
     def test_start(self):
-        self.decp_thrd.test_flag = True
-        self.decp_thrd.start()
+        if self.decp_thrd._isRunning is False:
+            self.decp_thrd._isRunning = True
+            self.decp_thrd.test_flag = True
+            self.decp_thrd.start()
 
     def test_stop(self):
-        self.decp_thrd.test_flag = False
-        self.decp_thrd.stop()
-        self.decp_thrd.quit()
-        self.decp_thrd.wait()
+        if self.decp_thrd._isRunning is True:
+            self.decp_thrd._isRunning = False
+            self.decp_thrd.test_flag = False
+            self.test_flag = False
+            self.decp_thrd.stop()
+            self.decp_thrd.quit()
+            self.decp_thrd.wait()
 
 
 class WorkThread(QThread):
@@ -262,6 +288,7 @@ class WorkThread(QThread):
         super(WorkThread, self).__init__()
 
     def run(self):
+        global i
         self.para_flag = False
         if self.test_flag is False:
             def online_decouple():
@@ -271,13 +298,16 @@ class WorkThread(QThread):
 
             print('已经开启新线程，离成功更进了一步！')
             while self._isRunning:
-                online_decouple()
-                time.sleep(1)
+                if i is 100:
+                    online_decouple()
+                    time.sleep(1)
 
         else:
+            print("Test Start")
+            tf.reset_default_graph()
+            myIL = IL(restore_from='./para_save_test')
             while self._isRunning:
-                test(self, X_test=self.X_test)
-                time.sleep(1)
+                test(self, myIL, X_test=self.X_test)
 
     def decp_show(self, z):
         self.output_init.emit(z)
@@ -287,6 +317,7 @@ class WorkThread(QThread):
 
 
 if __name__ == '__main__':
+    global i
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('GTK+'))
     font = app.font()
