@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9873a8ed-42a6-41b7-a335-f2c197cf98f4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Online_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/Online_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PyQt_ForceSensor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PyQt_ForceSensor.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyserial_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyserial_demo.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,19 +18,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="787">
-              <caret line="260" column="30" lean-forward="true" selection-start-line="260" selection-start-column="30" selection-end-line="260" selection-end-column="30" />
+            <state relative-caret-position="138">
+              <caret line="208" column="24" selection-start-line="208" selection-start-column="8" selection-end-line="208" selection-end-column="24" />
               <folding>
-                <element signature="e#21#31#0" expanded="true" />
-                <element signature="e#1119#1612#0" />
-                <element signature="e#1659#2008#0" />
-                <element signature="e#2054#2850#0" />
-                <element signature="e#2897#3124#0" />
-                <element signature="e#4437#6077#0" />
-                <element signature="e#6161#6570#0" />
-                <element signature="e#6605#7159#0" />
-                <element signature="e#7280#7505#0" />
+                <element signature="e#1802#2151#0" />
+                <element signature="e#2197#2993#0" />
+                <element signature="e#3040#3267#0" />
+                <element signature="e#4764#6404#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ForceSensor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="248" column="13" selection-start-line="248" selection-start-column="13" selection-end-line="248" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -36,8 +42,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Online_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="545">
-              <caret line="106" column="26" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="26" />
+            <state relative-caret-position="119">
+              <caret line="92" column="23" lean-forward="true" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
                 <element signature="e#136#310#0" />
@@ -126,15 +132,16 @@
         <option value="$PROJECT_DIR$/Online_BP.py" />
         <option value="$PROJECT_DIR$/Online_TF.py" />
         <option value="$PROJECT_DIR$/ForceSensor.py" />
-        <option value="$PROJECT_DIR$/pyserial_demo.py" />
         <option value="$PROJECT_DIR$/Online_new.py" />
+        <option value="$PROJECT_DIR$/pyserial_demo.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="1487" />
-    <option name="width" value="1524" />
-    <option name="height" value="2012" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="475" />
+    <option name="y" value="126" />
+    <option name="width" value="1443" />
+    <option name="height" value="813" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -429,23 +436,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1346" height="901" extended-state="7" />
+    <frame x="-7" y="-7" width="1488" height="843" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.44054878" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09779614" />
       <window_info id="Structure" order="1" weight="0.2488336" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32914287" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7362805" weight="0.29961088" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7450593" weight="0.30366492" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7362805" weight="0.29957807" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7450593" weight="0.302391" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49814716" weight="0.32814527" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.25494072" side_tool="true" weight="0.17015707" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4970884" weight="0.32853404" />
-      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.4992378" weight="0.18848167" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49771342" weight="0.33071896" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4970884" weight="0.32770744" />
+      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.4992378" weight="0.36990154" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49771342" visible="true" weight="0.3305204" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -469,6 +476,21 @@
           <line>396</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pyserial_demo.py</url>
+          <line>265</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pyserial_demo.py</url>
+          <line>266</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pyserial_demo.py</url>
+          <line>269</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -478,6 +500,12 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self.decp_flag" />
+        <watch expression="self.decp_thrd" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
@@ -542,13 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ForceSensor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="483" column="52" selection-start-line="483" selection-start-column="52" selection-end-line="483" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Anaconda/Lib/site-packages/PyQt5/QtCore.pyi">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="248">
@@ -556,28 +577,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ForceSensor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="248" column="13" selection-start-line="248" selection-start-column="13" selection-end-line="248" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="787">
-          <caret line="260" column="30" lean-forward="true" selection-start-line="260" selection-start-column="30" selection-end-line="260" selection-end-column="30" />
+        <state relative-caret-position="138">
+          <caret line="208" column="24" selection-start-line="208" selection-start-column="8" selection-end-line="208" selection-end-column="24" />
           <folding>
-            <element signature="e#21#31#0" expanded="true" />
-            <element signature="e#1119#1612#0" />
-            <element signature="e#1659#2008#0" />
-            <element signature="e#2054#2850#0" />
-            <element signature="e#2897#3124#0" />
-            <element signature="e#4437#6077#0" />
-            <element signature="e#6161#6570#0" />
-            <element signature="e#6605#7159#0" />
-            <element signature="e#7280#7505#0" />
+            <element signature="e#1802#2151#0" />
+            <element signature="e#2197#2993#0" />
+            <element signature="e#3040#3267#0" />
+            <element signature="e#4764#6404#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Online_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
-          <caret line="106" column="26" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="26" />
+        <state relative-caret-position="119">
+          <caret line="92" column="23" lean-forward="true" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
           <folding>
             <element signature="e#24#33#0" expanded="true" />
             <element signature="e#136#310#0" />

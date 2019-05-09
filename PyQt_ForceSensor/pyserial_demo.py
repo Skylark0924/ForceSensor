@@ -121,6 +121,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.zero[3] = float(self.R4.text())
         self.zero[4] = float(self.R5.text())
         self.zero[5] = float(self.R6.text())
+        print("Set Zero Success!")
 
     def data_diff(self):
         try:
@@ -136,10 +137,11 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
             self.R4.setText(str(self.X_train[3][0]))
             self.R5.setText(str(self.X_train[4][0]))
             self.R6.setText(str(self.X_train[5][0]))
-            if self.decp_flag:
-                self.decp_thrd.X_train = self.X_train
+
             if self.test_flag:
                 self.decp_thrd.X_test = self.X_train
+            else:
+                self.decp_thrd.X_train = self.X_train
         except:
             print('Wrong string')
             return None
@@ -214,13 +216,20 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         time.sleep(1)
 
     def decp_start(self):
+        self.decp_thrd._isRunning = True
+        self.decp_thrd.test_flag = False
+        self.decp_flag = True
         self.set_label()
+        time.sleep(1)
         self.decp_thrd.start()
+        print("Decouple Start")
 
     def decp_stop(self):
+        self.decp_flag = False
         self.decp_thrd.stop()
         self.decp_thrd.quit()
         self.decp_thrd.wait()
+        print("Decouple Stop")
 
     def decp_show(self, z):
         self.DE1.setText(str(z[0][0]))
@@ -251,11 +260,6 @@ class WorkThread(QThread):
     def __int__(self, parent=None):
         # 初始化函数，默认
         super(WorkThread, self).__init__()
-        self.Y_train = None
-        self.X_train = None
-        self.X_test = None
-        self._isRunning = True
-        self.test_flag = False
 
     def run(self):
         self.para_flag = False
