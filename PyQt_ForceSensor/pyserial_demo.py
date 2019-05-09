@@ -317,7 +317,6 @@ class WorkThread(QThread):
 
 
 if __name__ == '__main__':
-    global i
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('GTK+'))
     font = app.font()
