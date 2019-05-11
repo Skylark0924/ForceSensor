@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4925">
-              <caret line="318" column="26" selection-start-line="318" selection-start-column="26" selection-end-line="318" selection-end-column="26" />
+            <state relative-caret-position="3520">
+              <caret line="160" column="29" selection-start-line="160" selection-start-column="29" selection-end-line="160" selection-end-column="29" />
               <folding>
                 <element signature="e#21#31#0" expanded="true" />
               </folding>
@@ -28,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Online_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-17">
-              <caret line="87" column="2" selection-start-line="87" selection-start-column="2" selection-end-line="87" selection-end-column="2" />
+            <state relative-caret-position="-356">
+              <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
                 <element signature="e#136#310#0" />
@@ -122,10 +122,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="472" />
+    <option name="x" value="468" />
     <option name="y" value="126" />
-    <option name="width" value="1447" />
-    <option name="height" value="817" />
+    <option name="width" value="1449" />
+    <option name="height" value="819" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -134,20 +134,7 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="PyQt_ForceSensor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PyQt_ForceSensor" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -423,17 +410,17 @@
     <frame x="-6" y="-6" width="1346" height="901" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09679878" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.21036585" />
       <window_info id="Structure" order="1" weight="0.2488336" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32914287" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7362805" weight="0.19714656" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.56083804" weight="0.25551233" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7450593" weight="0.30220494" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49814716" weight="0.32814527" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.25494072" side_tool="true" weight="0.17015707" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.43916196" side_tool="true" visible="true" weight="0.25551233" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4970884" weight="0.32770744" />
       <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.4992378" weight="0.36990154" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49771342" weight="0.3294423" />
@@ -555,8 +542,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Online_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-17">
-          <caret line="87" column="2" selection-start-line="87" selection-start-column="2" selection-end-line="87" selection-end-column="2" />
+        <state relative-caret-position="-356">
+          <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
           <folding>
             <element signature="e#24#33#0" expanded="true" />
             <element signature="e#136#310#0" />
@@ -567,8 +554,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4925">
-          <caret line="318" column="26" selection-start-line="318" selection-start-column="26" selection-end-line="318" selection-end-column="26" />
+        <state relative-caret-position="3520">
+          <caret line="160" column="29" selection-start-line="160" selection-start-column="29" selection-end-line="160" selection-end-column="29" />
           <folding>
             <element signature="e#21#31#0" expanded="true" />
           </folding>

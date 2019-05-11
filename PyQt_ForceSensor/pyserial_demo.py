@@ -42,9 +42,10 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.decp_thrd = WorkThread()
         self.decp_thrd.output_init.connect(self.decp_show)
 
-        self.init_timer = QTimer(self)
-        self.init_timer.timeout.connect(self.init)
-        self.init_timer.start(1000)
+        # self.init_timer = QTimer(self)
+        # self.init_timer.timeout.connect(self.init)
+        # self.init_timer.start(1000)
+        self.init()
 
     def init(self):
         if self.open_flag is False:
@@ -83,14 +84,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         if self.open_flag is False:
             # self.ser1.port = self.comboBox.currentText()
             # self.ser1.port = '/dev/ttyUSB2'
-            self.ser1.port = 'COM5'
+            self.ser1.port = 'COM8'
             self.ser1.baudrate = 9600
             self.ser1.bytesize = 8
             self.ser1.stopbits = 1
 
             # self.ser2.port = self.comboBox_2.currentText()
             # self.ser2.port = '/dev/ttyUSB3'
-            self.ser2.port = 'COM6'
+            self.ser2.port = 'COM9'
             self.ser2.baudrate = 9600
             self.ser2.bytesize = 8
             self.ser2.stopbits = 1
@@ -160,7 +161,6 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                     self.decp_thrd.X_train = self.X_train
                 i = 0
         except:
-            print('Wrong string')
             return None
 
     def data_receive(self):
@@ -199,11 +199,12 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                     self.D6.setText(self.datalist2[5])
                     self.D7.setText(self.datalist2[6])
                     self.D8.setText(self.datalist2[7])
+                    self.data_diff()
             except:
                 print('Wrong string')
                 return None
         self.enter_flag = True
-        self.data_diff()
+
         # self.set_input()
 
     '''
@@ -306,6 +307,7 @@ class WorkThread(QThread):
             print("Test Start")
             tf.reset_default_graph()
             myIL = IL(restore_from='./para_save_test')
+            # 开始动态解耦
             while self._isRunning:
                 test(self, myIL, X_test=self.X_test)
 
