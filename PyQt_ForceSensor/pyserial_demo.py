@@ -30,7 +30,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.port_check()
         self.rcv_bytes1 = ''
         self.rcv_bytes2 = ''
-        self.X_train = np.zeros((6, 1))
+        self.X_train = np.zeros((6, 100))
         self.Y_train = np.zeros((6, 1))
         self.zero = np.zeros((6, 1))
         self.parameters = None
@@ -84,14 +84,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         if self.open_flag is False:
             # self.ser1.port = self.comboBox.currentText()
             # self.ser1.port = '/dev/ttyUSB2'
-            self.ser1.port = 'COM8'
+            self.ser1.port = 'COM25'
             self.ser1.baudrate = 9600
             self.ser1.bytesize = 8
             self.ser1.stopbits = 1
 
             # self.ser2.port = self.comboBox_2.currentText()
             # self.ser2.port = '/dev/ttyUSB3'
-            self.ser2.port = 'COM9'
+            self.ser2.port = 'COM27'
             self.ser2.baudrate = 9600
             self.ser2.bytesize = 8
             self.ser2.stopbits = 1
@@ -138,30 +138,27 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
     def data_diff(self):
         global i
-        try:
-            self.X_train[0][i] = float(self.U2.text()) - float(self.U3.text()) - self.zero[0]
-            self.X_train[1][i] = float(self.U4.text()) - float(self.U5.text()) - self.zero[1]
-            self.X_train[2][i] = float(self.U6.text()) - float(self.U7.text()) - self.zero[2]
-            self.X_train[3][i] = float(self.D2.text()) - float(self.D3.text()) - self.zero[3]
-            self.X_train[4][i] = float(self.D4.text()) - float(self.D5.text()) - self.zero[4]
-            self.X_train[5][i] = float(self.D6.text()) - float(self.D7.text()) - self.zero[5]
-            self.R1.setText(str(self.X_train[0][i]))
-            self.R2.setText(str(self.X_train[1][i]))
-            self.R3.setText(str(self.X_train[2][i]))
-            self.R4.setText(str(self.X_train[3][i]))
-            self.R5.setText(str(self.X_train[4][i]))
-            self.R6.setText(str(self.X_train[5][i]))
-            i = i + 1
-            print(i)
+        self.X_train[0][i] = float(self.U2.text()) - float(self.U3.text()) - self.zero[0]
+        self.X_train[1][i] = float(self.U4.text()) - float(self.U5.text()) - self.zero[1]
+        self.X_train[2][i] = float(self.U6.text()) - float(self.U7.text()) - self.zero[2]
+        self.X_train[3][i] = float(self.D2.text()) - float(self.D3.text()) - self.zero[3]
+        self.X_train[4][i] = float(self.D4.text()) - float(self.D5.text()) - self.zero[4]
+        self.X_train[5][i] = float(self.D6.text()) - float(self.D7.text()) - self.zero[5]
+        self.R1.setText(str(self.X_train[0][i]))
+        self.R2.setText(str(self.X_train[1][i]))
+        self.R3.setText(str(self.X_train[2][i]))
+        self.R4.setText(str(self.X_train[3][i]))
+        self.R5.setText(str(self.X_train[4][i]))
+        self.R6.setText(str(self.X_train[5][i]))
+        i = i + 1
 
-            if i is 100:
-                if self.test_flag:
-                    self.decp_thrd.X_test = self.X_train
-                else:
-                    self.decp_thrd.X_train = self.X_train
-                i = 0
-        except:
-            return None
+        if i is 100:
+            if self.test_flag:
+                self.decp_thrd.X_test = self.X_train
+            else:
+                self.decp_thrd.X_train = self.X_train
+            print(self.X_train)
+            i = 0
 
     def data_receive(self):
         self.rcv_bytes1 = self.ser1.readline()
@@ -199,10 +196,10 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
                     self.D6.setText(self.datalist2[5])
                     self.D7.setText(self.datalist2[6])
                     self.D8.setText(self.datalist2[7])
-                    self.data_diff()
             except:
                 print('Wrong string')
                 return None
+            self.data_diff()
         self.enter_flag = True
 
         # self.set_input()

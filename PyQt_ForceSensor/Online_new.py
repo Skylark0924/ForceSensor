@@ -72,6 +72,19 @@ class IL:
 
         return outputs
 
+    '''
+        基于当前数据集归纳出输入的分布
+    '''
+    def induction(self):
+        return None
+
+    '''
+        在上一次的分布中随机生成模拟测试集的输入，带入上一次的网络得到模拟测试集的标签，组成模拟测试集.
+        混入当前数据集中，组成新的训练集。        
+    '''
+    def remember(self):
+        return None
+
     def train(self, x, y):
         loss, _ = self.sess.run([self.loss, self.train_op],
                                 feed_dict={self.xs: x, self.ys: y})
