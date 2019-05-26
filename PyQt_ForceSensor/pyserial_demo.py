@@ -10,9 +10,12 @@ from Online_new import *
 import numpy as np
 import threading
 import time
+import seaborn as sns
 
 global i
+global num  # 独立训练次数
 i = 0
+num = 0
 
 
 class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
@@ -24,6 +27,7 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.decp_flag = False
         self.test_flag = False
         self.zero_flag = False
+        self.save_flag = False
         self.setupUi(self)
         self.ser1 = serial.Serial()
         self.ser2 = serial.Serial()
@@ -41,11 +45,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
 
         self.decp_thrd = WorkThread()
         self.decp_thrd.output_init.connect(self.decp_show)
+        self.decp_thrd.first_flag = True  # 第一次训练
 
-        # self.init_timer = QTimer(self)
-        # self.init_timer.timeout.connect(self.init)
-        # self.init_timer.start(1000)
-        self.init()
+        self.init_timer = QTimer(self)
+        self.init_timer.timeout.connect(self.init)
+        self.init_timer.start(1000)
+        # self.init()
+
+        self.save_button.clicked.connect(self.save_data)
 
     def init(self):
         if self.open_flag is False:
@@ -84,14 +91,14 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         if self.open_flag is False:
             # self.ser1.port = self.comboBox.currentText()
             # self.ser1.port = '/dev/ttyUSB2'
-            self.ser1.port = 'COM25'
+            self.ser1.port = 'COM8'
             self.ser1.baudrate = 9600
             self.ser1.bytesize = 8
             self.ser1.stopbits = 1
 
             # self.ser2.port = self.comboBox_2.currentText()
             # self.ser2.port = '/dev/ttyUSB3'
-            self.ser2.port = 'COM27'
+            self.ser2.port = 'COM9'
             self.ser2.baudrate = 9600
             self.ser2.bytesize = 8
             self.ser2.stopbits = 1
@@ -150,15 +157,19 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.R4.setText(str(self.X_train[3][i]))
         self.R5.setText(str(self.X_train[4][i]))
         self.R6.setText(str(self.X_train[5][i]))
-        i = i + 1
-
-        if i is 100:
-            if self.test_flag:
-                self.decp_thrd.X_test = self.X_train
-            else:
-                self.decp_thrd.X_train = self.X_train
-            print(self.X_train)
-            i = 0
+        # print(str(i))
+        if self.save_flag:
+            i = i + 1
+            print(str(i))
+            if i is 100:
+                if self.test_flag:
+                    self.decp_thrd.X_test = self.X_train
+                else:
+                    self.decp_thrd.X_train = self.X_train
+                for j in range(6):
+                    print(str(j + 1) + ': ' + str(np.mean(self.X_train[j][:])))
+                i = 0
+                self.save_flag = False
 
     def data_receive(self):
         self.rcv_bytes1 = self.ser1.readline()
@@ -218,33 +229,48 @@ class Pyqt5_Serial(QtWidgets.QMainWindow, Ui_ForceSensor):
         self.decp_thrd.Y_train = self.Y_train
 
     def set_input(self):
-        self.X_train = np.linspace(-1, 1, 6, dtype=np.float32)[:, np.newaxis]
-        self.noise = np.random.normal(0, 0.05, (6, 1)).astype(np.float32)
-        self.X_train = self.X_train + self.noise
+        global i
+        self.noise = np.random.normal(0, 1, (6, 100)).astype(np.float32)
+        self.X_train = self.noise
         self.decp_thrd.X_train = self.X_train
-        self.R1.setText(str(self.X_train[0][0]))
-        self.R2.setText(str(self.X_train[1][0]))
-        self.R3.setText(str(self.X_train[2][0]))
-        self.R4.setText(str(self.X_train[3][0]))
-        self.R5.setText(str(self.X_train[4][0]))
-        self.R6.setText(str(self.X_train[5][0]))
-        time.sleep(1)
+        self.R1.setText(str(self.X_train[0][i]))
+        self.R2.setText(str(self.X_train[1][i]))
+        self.R3.setText(str(self.X_train[2][i]))
+        self.R4.setText(str(self.X_train[3][i]))
+        self.R5.setText(str(self.X_train[4][i]))
+        self.R6.setText(str(self.X_train[5][i]))
+        print(str(i))
+        if self.save_flag:
+            i = i + 1
+            if i is 100:
+                if self.test_flag:
+                    self.decp_thrd.X_test = self.X_train
+                else:
+                    self.decp_thrd.X_train = self.X_train
+                for j in range(6):
+                    print(str(j+1) + ': ' + str(np.mean(self.X_train[j][:])))
+                i = 0
+                self.save_flag = False
+
+    def save_data(self):
+        self.save_flag = True
 
     def decp_start(self):
         if self.decp_flag is False:
             self.decp_thrd._isRunning = True
             self.decp_thrd.test_flag = False
-            self.decp_flag = True
             self.set_label()
             time.sleep(1)
             self.decp_thrd.start()
             print("Decouple Start")
+            self.decp_flag = True
 
     def decp_stop(self):
         if self.decp_flag is True:
             self.decp_thrd._isRunning = False
             self.decp_flag = False
             self.test_flag = True
+            self.decp_thrd.first_flag = False
             # self.decp_thrd.stop()
             self.decp_thrd.quit()
             self.decp_thrd.wait()
@@ -287,20 +313,37 @@ class WorkThread(QThread):
 
     def run(self):
         global i
+        global num
         self.para_flag = False
-        if self.test_flag is False:
-            def online_decouple():
-                print('当前线程数为{}'.format(threading.activeCount()))
-                model(self, X_train=self.X_train, Y_train=self.Y_train)
-                self.para_flag = True
 
-            print('已经开启新线程，离成功更进了一步！')
+        def online_decouple():
+            print('当前线程数为{}'.format(threading.activeCount()))
+            model(self, myIL, X_train=self.X_train, Y_train=self.Y_train)
+            self.para_flag = True
+
+        if self.test_flag is False and self.first_flag is True and self._isRunning is True:
+            myIL = IL()
+            # online_decouple()
+            # tf.reset_default_graph()
+            # myIL = IL(restore_from='./para_save_test')
+            print('第一个独立同分布训练')
             while self._isRunning:
                 if i is 100:
                     online_decouple()
-                    time.sleep(1)
+                # time.sleep(1)
+            myIL.save('./para_save_test')  # save learned fc layers
+            num = 1
 
-        else:
+        elif self.test_flag is False and self.first_flag is False and self._isRunning is True:
+            myIL = IL(restore_from='./para_save_test')
+            num = num + 1
+            print('第' + str(num) + '个独立同分布训练！')
+            while self._isRunning:
+                if i is 100:
+                    online_decouple()
+                # time.sleep(1)
+            myIL.save('./para_save_test')  # save learned fc layers
+        elif self.test_flag and self._isRunning:
             print("Test Start")
             tf.reset_default_graph()
             myIL = IL(restore_from='./para_save_test')

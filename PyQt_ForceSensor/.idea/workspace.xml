@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9873a8ed-42a6-41b7-a335-f2c197cf98f4" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/data_process.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/PyQt_ForceSensor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PyQt_ForceSensor.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Online_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/Online_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/para_save_test.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/para_save_test.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/para_save_test.index" beforeDir="false" afterPath="$PROJECT_DIR$/para_save_test.index" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyserial_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyserial_demo.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,8 +22,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="204" column="26" lean-forward="true" selection-start-line="204" selection-start-column="26" selection-end-line="204" selection-end-column="26" />
+            <state relative-caret-position="2574">
+              <caret line="117" column="17" selection-start-line="117" selection-start-column="17" selection-end-line="117" selection-end-column="17" />
               <folding>
                 <element signature="e#21#31#0" expanded="true" />
               </folding>
@@ -31,10 +34,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Online_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="78" column="19" lean-forward="true" selection-start-line="78" selection-start-column="19" selection-end-line="78" selection-end-column="19" />
+            <state relative-caret-position="110">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" selection-end-column="40" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
+                <element signature="e#136#310#0" />
+                <element signature="e#1966#2871#0" />
               </folding>
             </state>
           </provider>
@@ -51,7 +56,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;TextLabel&quot;</find>
       <find>open</find>
       <find>U</find>
       <find>one_hot_matrix</find>
@@ -81,6 +85,7 @@
       <find>i=0</find>
       <find>i = 0</find>
       <find>ni</find>
+      <find>save</find>
     </findStrings>
     <replaceStrings>
       <replace>Ui_ForseSensor</replace>
@@ -117,16 +122,16 @@
         <option value="$PROJECT_DIR$/Online_BP.py" />
         <option value="$PROJECT_DIR$/Online_TF.py" />
         <option value="$PROJECT_DIR$/ForceSensor.py" />
-        <option value="$PROJECT_DIR$/pyserial_demo.py" />
         <option value="$PROJECT_DIR$/Online_new.py" />
+        <option value="$PROJECT_DIR$/pyserial_demo.py" />
+        <option value="$PROJECT_DIR$/data_process.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-616" />
-    <option name="y" value="200" />
-    <option name="width" value="1413" />
-    <option name="height" value="1090" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1487" />
+    <option name="width" value="1524" />
+    <option name="height" value="2012" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -139,7 +144,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../PRRL/PRRL_190409/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -154,7 +159,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.pyserial_demo">
+  <component name="RunManager" selected="Python.data_process">
     <configuration name="ForseSensor" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PyQt_ForceSensor" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -218,6 +223,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="data_process" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PyQt_ForceSensor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_process.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="improv_utils" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PyQt_ForceSensor" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -252,27 +278,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyserial_demo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="untitled" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="PyQttest" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/untitled.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -371,17 +376,17 @@
     <list>
       <item itemvalue="Python.ForseSensor" />
       <item itemvalue="Python.Online_BP" />
+      <item itemvalue="Python.data_process" />
       <item itemvalue="Python.improv_utils" />
       <item itemvalue="Python.pyserial_demo" />
-      <item itemvalue="Python.untitled" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.data_process" />
         <item itemvalue="Python.pyserial_demo" />
         <item itemvalue="Python.improv_utils" />
         <item itemvalue="Python.ForseSensor" />
         <item itemvalue="Python.Online_BP" />
-        <item itemvalue="Python.untitled" />
       </list>
     </recent_temporary>
   </component>
@@ -408,23 +413,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1488" height="843" extended-state="6" />
+    <frame x="661" y="0" width="677" height="894" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.21036585" />
-      <window_info id="Structure" order="1" weight="0.2488336" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.20995334" />
+      <window_info id="Structure" order="1" weight="0.5069984" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32914287" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.55991733" weight="0.36427566" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.55991733" weight="0.6835279" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7450593" weight="0.30220494" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49814716" weight="0.32814527" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.44008264" side_tool="true" weight="0.25457102" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4970884" weight="0.32770744" />
-      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.4992378" weight="0.36990154" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49771342" weight="0.3294423" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4970884" weight="0.32722512" />
+      <window_info anchor="bottom" auto_hide="true" x="32" y="78" width="1131" height="737" id="Python Console" order="9" sideWeight="0.4992378" type="FLOATING" weight="0.33769634" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49771342" weight="0.8715953" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -539,17 +544,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data_process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="671">
+          <caret line="126" column="24" selection-start-line="126" selection-start-column="24" selection-end-line="126" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ForceSensor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="248" column="13" selection-start-line="248" selection-start-column="13" selection-end-line="248" selection-end-column="13" />
+        <state relative-caret-position="670">
+          <caret line="290" column="13" selection-start-line="290" selection-start-column="13" selection-end-line="290" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pyserial_demo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="204" column="26" lean-forward="true" selection-start-line="204" selection-start-column="26" selection-end-line="204" selection-end-column="26" />
+        <state relative-caret-position="2574">
+          <caret line="117" column="17" selection-start-line="117" selection-start-column="17" selection-end-line="117" selection-end-column="17" />
           <folding>
             <element signature="e#21#31#0" expanded="true" />
           </folding>
@@ -558,10 +570,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Online_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="78" column="19" lean-forward="true" selection-start-line="78" selection-start-column="19" selection-end-line="78" selection-end-column="19" />
+        <state relative-caret-position="110">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" selection-end-column="40" />
           <folding>
             <element signature="e#24#33#0" expanded="true" />
+            <element signature="e#136#310#0" />
+            <element signature="e#1966#2871#0" />
           </folding>
         </state>
       </provider>

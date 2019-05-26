@@ -95,12 +95,12 @@ class IL:
         saver.save(self.sess, path, write_meta_graph=False)
 
 
-def model(WorkThread, X_train, Y_train):
-    if WorkThread.para_flag is False:
-        myIL = IL()
-    else:
-        tf.reset_default_graph()
-        myIL = IL(restore_from='./para_save_test')
+def model(WorkThread, myIL, X_train, Y_train):
+    # if WorkThread.para_flag is False:
+    #     myIL = IL()
+    # else:
+    #     tf.reset_default_graph()
+    #     myIL = IL(restore_from='./para_save_test')
     for i in range(101):
         train_loss = myIL.train(X_train, Y_train)
         if i % 50 == 0:
@@ -112,7 +112,7 @@ def model(WorkThread, X_train, Y_train):
             WorkThread.decp_show(output.tolist())
         # print(myIL.sess.run(myIL.layer1, feed_dict={myIL.xs: xtest}))
 
-    myIL.save('./para_save_test')  # save learned fc layers
+
 
 
 def test(WorkThread, myIL, X_test):
